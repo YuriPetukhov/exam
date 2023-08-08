@@ -9,6 +9,7 @@ import java.util.*;
 
 @Service("mathQuestionService")
 public class MathQuestionServiceImpl implements QuestionService {
+    private final Random random = new Random();
     public MathQuestionServiceImpl() {
     }
 
@@ -29,11 +30,11 @@ public class MathQuestionServiceImpl implements QuestionService {
 
     @Override
     public Question getRandomQuestion() {
-        Random random = new Random();
-        String question = Integer.toString(random.nextInt(10)) + " + " + Integer.toString(random.nextInt(10));
+        String question = random.nextInt(10) + " + " + random.nextInt(10);
         String answer = Integer.toString(Integer.parseInt(question.split(" ")[0]) + Integer.parseInt(question.split(" ")[2]));
         return new Question(question, answer);
     }
+
 
     @Override
     public Collection<Question> getAmountOfQuestions(int amount) throws MethodNotAllowedException {

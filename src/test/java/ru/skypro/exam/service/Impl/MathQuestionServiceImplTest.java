@@ -22,8 +22,6 @@ class MathQuestionServiceImplTest {
     @InjectMocks
     MathQuestionServiceImpl mathQuestionService;
 
-    private List<Question> questions;
-
     @Test
     @DisplayName("Тестирование вызова методов репозитория при добавлении, удалении, поиске, запросе количества и получении всех вопросов")
     void shouldCallRepositoryMethodsAndThrowMethodNotAllowedException() throws MethodNotAllowedException {
@@ -65,6 +63,6 @@ class MathQuestionServiceImplTest {
             uniqueQuestions.add(randomQuestion);
         }
 
-        assertTrue(uniqueQuestions.size() > 1, "Generated questions should have some variety");
+        assertTrue(uniqueQuestions.size() > 1, "Сгенерированные вопросы должны отличаться");
     }
 }

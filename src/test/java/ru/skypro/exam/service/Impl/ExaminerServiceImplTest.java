@@ -74,7 +74,7 @@ public class ExaminerServiceImplTest {
 
     @Test
     @DisplayName("Тестирование получения вопросов, когда нет доступных вопросов")
-    public void shouldThrowExceptionByEmptyList() throws MethodNotAllowedException {
+    public void shouldThrowExceptionByEmptyList() {
         int amount = 5;
 
         assertThrows(NotEnoughQuestionException.class, () -> {
@@ -84,7 +84,7 @@ public class ExaminerServiceImplTest {
 
     @Test
     @DisplayName("Тестирование получения вопросов при невалидном числе")
-    public void shouldThrowExceptionNotValidNumber() throws MethodNotAllowedException {
+    public void shouldThrowExceptionNotValidNumber() {
         int amount = -2;
         assertThrows(NotValidNumberException.class, () -> {
             examinerService.getQuestions(amount);
