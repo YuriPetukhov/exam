@@ -22,15 +22,15 @@ public class MathQuestionController {
         this.questionService = questionService;
     }
     @GetMapping("/add")
-    public String addMathQuestion(@RequestParam String question, @RequestParam String answer) throws AnswerAlreadyExistsException, QuestionAlreadyExistsException {
+    public String addMathQuestion(@RequestParam String question, @RequestParam String answer) throws AnswerAlreadyExistsException, QuestionAlreadyExistsException, MethodNotAllowedException {
         return "Вопрос успешно добавлен: " + questionService.addQuestion(question, answer);
     }
     @GetMapping("/remove")
-    public String removeMathQuestion(@RequestParam String question) throws QuestionNotExistsException {
+    public String removeMathQuestion(@RequestParam String question) throws QuestionNotExistsException, MethodNotAllowedException {
         return "Вопрос успешно удален: " + questionService.removeQuestion(question);
     }
     @GetMapping("/find")
-    public ResponseEntity<?> findMathQuestion(@RequestParam String question) throws QuestionNotExistsException {
+    public ResponseEntity<?> findMathQuestion(@RequestParam String question) throws QuestionNotExistsException, MethodNotAllowedException {
         Question foundQuestion = questionService.findQuestion(question);
         return ResponseEntity.ok(Objects.requireNonNullElse(foundQuestion, "Вопрос не найден"));
     }
@@ -39,11 +39,11 @@ public class MathQuestionController {
         return questionService.getRandomQuestion();
     }
     @GetMapping("/get/amount")
-    public Collection<Question> getAmountOfMathQuestions(@RequestParam int amount) throws NotValidNumberException, NotEnoughQuestionException, QuestionNotExistsException {
+    public Collection<Question> getAmountOfMathQuestions(@RequestParam int amount) throws NotValidNumberException, NotEnoughQuestionException, QuestionNotExistsException, MethodNotAllowedException {
         return questionService.getAmountOfQuestions(amount);
     }
     @GetMapping("/getAll")
-    public Collection<Question> getAllMathQuestions() {
+    public Collection<Question> getAllMathQuestions() throws MethodNotAllowedException {
         return questionService.getAllQuestions();
     }
 }

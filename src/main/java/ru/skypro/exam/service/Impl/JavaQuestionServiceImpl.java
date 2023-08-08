@@ -1,7 +1,10 @@
 package ru.skypro.exam.service.Impl;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import ru.skypro.exam.Repository.JavaQuestionRepository;
+import ru.skypro.exam.Repository.QuestionRepository;
 import ru.skypro.exam.exceptions.*;
 import ru.skypro.exam.model.Question;
 import ru.skypro.exam.service.QuestionService;
@@ -13,7 +16,7 @@ import java.util.*;
 public class JavaQuestionServiceImpl implements QuestionService {
     private final JavaQuestionRepository javaQuestionRepository;
 
-    public JavaQuestionServiceImpl(JavaQuestionRepository javaQuestionRepository) {
+    public JavaQuestionServiceImpl(@Autowired JavaQuestionRepository javaQuestionRepository) {
         this.javaQuestionRepository = javaQuestionRepository;
     }
 

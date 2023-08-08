@@ -1,67 +1,47 @@
 package ru.skypro.exam.service.Impl;
 
 import org.springframework.stereotype.Service;
-import ru.skypro.exam.Repository.MathQuestionRepository;
 import ru.skypro.exam.exceptions.*;
 import ru.skypro.exam.model.Question;
 import ru.skypro.exam.service.QuestionService;
-import ru.skypro.exam.validation.NumberValidator;
 
 import java.util.*;
 
 @Service("mathQuestionService")
 public class MathQuestionServiceImpl implements QuestionService {
-    private final MathQuestionRepository mathQuestionRepository;
-
-    public MathQuestionServiceImpl(MathQuestionRepository mathQuestionRepository) {
-        this.mathQuestionRepository = mathQuestionRepository;
+    public MathQuestionServiceImpl() {
     }
 
     @Override
-    public Question addQuestion(String question, String answer) throws QuestionAlreadyExistsException, AnswerAlreadyExistsException {
-        return mathQuestionRepository.addQuestion(question, answer);
+    public Question addQuestion(String question, String answer) throws MethodNotAllowedException {
+        throw new MethodNotAllowedException();
     }
 
     @Override
-    public Question removeQuestion(String questionText) throws QuestionNotExistsException {
-        return mathQuestionRepository.removeQuestion(questionText);
+    public Question removeQuestion(String questionText) throws MethodNotAllowedException {
+        throw new MethodNotAllowedException();
     }
 
     @Override
-    public Question findQuestion(String question) {
-        Optional<Question> foundQuestion = getAllQuestions().stream()
-                .filter(existingQuestion -> existingQuestion.getQuestion().equals(question))
-                .findFirst();
-        return foundQuestion.orElse(null);
+    public Question findQuestion(String question) throws MethodNotAllowedException {
+        throw new MethodNotAllowedException();
     }
 
     @Override
     public Question getRandomQuestion() {
-        Collection<Question> allQuestions = getAllQuestions();
-        return allQuestions.stream()
-                .skip(new Random().nextInt(allQuestions.size()))
-                .findFirst()
-                .orElse(null);
+        Random random = new Random();
+        String question = Integer.toString(random.nextInt(10)) + " + " + Integer.toString(random.nextInt(10));
+        String answer = Integer.toString(Integer.parseInt(question.split(" ")[0]) + Integer.parseInt(question.split(" ")[2]));
+        return new Question(question, answer);
     }
 
     @Override
-    public Collection<Question> getAmountOfQuestions(int amount) throws QuestionNotExistsException, NotValidNumberException, NotEnoughQuestionException {
-        List<Question> questionList = new ArrayList<>(getAllQuestions());
-
-        if (questionList.isEmpty()) {
-            throw new QuestionNotExistsException();
-        }
-        if (!NumberValidator.isValidNumber(amount)) {
-            throw new NotValidNumberException();
-        }
-        if (amount > questionList.size()) {
-            throw new NotEnoughQuestionException();
-        }
-        Collections.shuffle(questionList);
-        return questionList.subList(0, Math.min(amount, questionList.size()));
+    public Collection<Question> getAmountOfQuestions(int amount) throws MethodNotAllowedException {
+        throw new MethodNotAllowedException();
     }
+
     @Override
-    public Collection<Question> getAllQuestions() {
-        return mathQuestionRepository.getAllQuestions();
+    public Collection<Question> getAllQuestions() throws MethodNotAllowedException {
+        throw new MethodNotAllowedException();
     }
 }
