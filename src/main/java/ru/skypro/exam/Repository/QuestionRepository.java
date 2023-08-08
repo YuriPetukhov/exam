@@ -1,15 +1,12 @@
-package ru.skypro.exam.service;
+package ru.skypro.exam.Repository;
 
 import ru.skypro.exam.exceptions.*;
 import ru.skypro.exam.model.Question;
 
 import java.util.Collection;
 
-public interface QuestionService {
+public interface QuestionRepository {
     Question addQuestion(String question, String answer) throws QuestionAlreadyExistsException, AnswerAlreadyExistsException;
     Question removeQuestion(String question) throws QuestionNotExistsException;
-    Question findQuestion(String question) throws QuestionNotExistsException;
-    Question getRandomQuestion();
-    Collection<Question> getAmountOfQuestions(int amount) throws QuestionNotExistsException, NotValidNumberException, NotEnoughQuestionException;
     Collection<Question> getAllQuestions();
 }

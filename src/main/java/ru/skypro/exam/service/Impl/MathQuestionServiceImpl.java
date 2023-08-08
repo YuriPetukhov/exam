@@ -1,7 +1,7 @@
 package ru.skypro.exam.service.Impl;
 
 import org.springframework.stereotype.Service;
-import ru.skypro.exam.Repository.JavaQuestionRepository;
+import ru.skypro.exam.Repository.MathQuestionRepository;
 import ru.skypro.exam.exceptions.*;
 import ru.skypro.exam.model.Question;
 import ru.skypro.exam.service.QuestionService;
@@ -9,21 +9,22 @@ import ru.skypro.exam.validation.NumberValidator;
 
 import java.util.*;
 
-@Service("javaQuestionService")
-public class JavaQuestionServiceImpl implements QuestionService {
-    private final JavaQuestionRepository javaQuestionRepository;
+@Service("mathQuestionService")
+public class MathQuestionServiceImpl implements QuestionService {
+    private final MathQuestionRepository mathQuestionRepository;
 
-    public JavaQuestionServiceImpl(JavaQuestionRepository javaQuestionRepository) {
-        this.javaQuestionRepository = javaQuestionRepository;
+    public MathQuestionServiceImpl(MathQuestionRepository mathQuestionRepository) {
+        this.mathQuestionRepository = mathQuestionRepository;
     }
 
     @Override
     public Question addQuestion(String question, String answer) throws QuestionAlreadyExistsException, AnswerAlreadyExistsException {
-        return javaQuestionRepository.addQuestion(question, answer);
+        return mathQuestionRepository.addQuestion(question, answer);
     }
+
     @Override
     public Question removeQuestion(String questionText) throws QuestionNotExistsException {
-        return javaQuestionRepository.removeQuestion(questionText);
+        return mathQuestionRepository.removeQuestion(questionText);
     }
 
     @Override
@@ -42,6 +43,7 @@ public class JavaQuestionServiceImpl implements QuestionService {
                 .findFirst()
                 .orElse(null);
     }
+
     @Override
     public Collection<Question> getAmountOfQuestions(int amount) throws QuestionNotExistsException, NotValidNumberException, NotEnoughQuestionException {
         List<Question> questionList = new ArrayList<>(getAllQuestions());
@@ -60,6 +62,6 @@ public class JavaQuestionServiceImpl implements QuestionService {
     }
     @Override
     public Collection<Question> getAllQuestions() {
-        return javaQuestionRepository.getAllQuestions();
+        return mathQuestionRepository.getAllQuestions();
     }
 }

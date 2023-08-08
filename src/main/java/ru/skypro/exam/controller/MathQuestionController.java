@@ -14,36 +14,36 @@ import java.util.Collection;
 import java.util.Objects;
 
 @RestController
-@RequestMapping("/exam/java")
-public class JavaQuestionsController {
+@RequestMapping("/exam/math")
+public class MathQuestionController {
     private final QuestionService questionService;
 
-    public JavaQuestionsController(@Qualifier("javaQuestionService") QuestionService questionService) {
+    public MathQuestionController(@Qualifier("mathQuestionService") QuestionService questionService) {
         this.questionService = questionService;
     }
     @GetMapping("/add")
-    public String addJavaQuestion(@RequestParam String question, @RequestParam String answer) throws AnswerAlreadyExistsException, QuestionAlreadyExistsException {
+    public String addMathQuestion(@RequestParam String question, @RequestParam String answer) throws AnswerAlreadyExistsException, QuestionAlreadyExistsException {
         return "Вопрос успешно добавлен: " + questionService.addQuestion(question, answer);
     }
     @GetMapping("/remove")
-    public String removeJavaQuestion(@RequestParam String question) throws QuestionNotExistsException {
+    public String removeMathQuestion(@RequestParam String question) throws QuestionNotExistsException {
         return "Вопрос успешно удален: " + questionService.removeQuestion(question);
     }
     @GetMapping("/find")
-    public ResponseEntity<?> findJavaQuestion(@RequestParam String question) throws QuestionNotExistsException {
+    public ResponseEntity<?> findMathQuestion(@RequestParam String question) throws QuestionNotExistsException {
         Question foundQuestion = questionService.findQuestion(question);
         return ResponseEntity.ok(Objects.requireNonNullElse(foundQuestion, "Вопрос не найден"));
     }
     @GetMapping("/random")
-    public Question getRandomJavaQuestion(){
+    public Question getRandomMathQuestion(){
         return questionService.getRandomQuestion();
     }
     @GetMapping("/get/amount")
-    public Collection<Question> getAmountOfJavaQuestions(@RequestParam int amount) throws NotValidNumberException, NotEnoughQuestionException, QuestionNotExistsException {
+    public Collection<Question> getAmountOfMathQuestions(@RequestParam int amount) throws NotValidNumberException, NotEnoughQuestionException, QuestionNotExistsException {
         return questionService.getAmountOfQuestions(amount);
     }
     @GetMapping("/getAll")
-    public Collection<Question> getAllJavaQuestions() {
+    public Collection<Question> getAllMathQuestions() {
         return questionService.getAllQuestions();
     }
 }

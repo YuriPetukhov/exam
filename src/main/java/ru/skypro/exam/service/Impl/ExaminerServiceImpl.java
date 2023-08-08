@@ -1,5 +1,7 @@
 package ru.skypro.exam.service.Impl;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import ru.skypro.exam.exceptions.NotEnoughQuestionException;
 import ru.skypro.exam.exceptions.NotValidNumberException;
@@ -9,36 +11,39 @@ import ru.skypro.exam.service.QuestionService;
 import ru.skypro.exam.validation.NumberValidator;
 
 import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 public class ExaminerServiceImpl implements ExaminerService {
-    private final QuestionService questionService;
-    private Random random;
+    private final QuestionService javaQuestionService;
+    private final QuestionService mathQuestionService;
 
-    public ExaminerServiceImpl(QuestionService questionService) {
-        this.questionService = questionService;
+    @Autowired
+    public ExaminerServiceImpl(@Qualifier("javaQuestionService") QuestionService javaQuestionService,
+                               @Qualifier("mathQuestionService") QuestionService mathQuestionService) {
+        this.javaQuestionService = javaQuestionService;
+        this.mathQuestionService = mathQuestionService;
     }
 
     @Override
-    public Collection<Question> getQuestions(int amount) throws NotValidNumberException, NotEnoughQuestionException {
+    public List<Question> getQuestions(int amount) throws NotEnoughQuestionException, NotValidNumberException {
         if (!NumberValidator.isValidNumber(amount)) {
             throw new NotValidNumberException();
         }
-
-        List<Question> availableQuestions = new ArrayList<>(questionService.getAllJavaQuestions());
-
-        if (amount > availableQuestions.size()) {
+        Set<Question> questions = Stream.concat(
+                        javaQuestionService.getAllQuestions().stream(),
+                        mathQuestionService.getAllQuestions().stream())
+                .collect(Collectors.toSet());
+        if (amount > questions.size()) {
             throw new NotEnoughQuestionException();
         }
+        List<Question> randomEmployees = new ArrayList<>(questions);
 
-        List<Question> randomQuestions = new ArrayList<>();
-        while (randomQuestions.size() < amount){
-            Question randomQuestion = questionService.getRandomJavaQuestion();
-            if (!randomQuestions.contains(randomQuestion)) {
-                randomQuestions.add(randomQuestion);
-            }
-        }
+        Collections.shuffle(randomEmployees);
 
-        return randomQuestions;
+        return randomEmployees.stream()
+                .limit(amount)
+                .collect(Collectors.toList());
     }
 }

@@ -6,7 +6,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import ru.skypro.exam.Repository.JavaQuestionRepository;
+import ru.skypro.exam.Repository.MathQuestionRepository;
 import ru.skypro.exam.exceptions.*;
 import ru.skypro.exam.model.Question;
 
@@ -18,98 +18,98 @@ import static org.mockito.Mockito.times;
 import static ru.skypro.exam.constant.QuestionsConstants.*;
 
 @ExtendWith(MockitoExtension.class)
-class JavaQuestionServiceImplTest {
+class MathQuestionServiceImplTest {
 
     @InjectMocks
-    private JavaQuestionServiceImpl javaQuestionServiceImpl;
+    private MathQuestionServiceImpl mathQuestionServiceImpl;
 
     @Mock
-    private JavaQuestionRepository javaQuestionRepository;
+    private MathQuestionRepository mathQuestionRepository;
     private List<Question> questions;
     @Test
     @DisplayName("Тестирование вызова методов репозитория при добавлении, удалении и получении всех вопросов")
     void shouldCallRepositoryMethodWhenAddRemoveAndGetAllQuestion() throws AnswerAlreadyExistsException, QuestionAlreadyExistsException, QuestionNotExistsException {
-        Question question = new Question(Q_J_1, A_J_1);
+        Question question = new Question(Q_M_1, A_M_1);
         List<Question> allQuestions = new ArrayList<>();
         allQuestions.add(question);
 
-        when(javaQuestionRepository.addQuestion(Q_J_1, A_J_1))
+        when(mathQuestionRepository.addQuestion(Q_M_1, A_M_1))
                 .thenReturn(question);
-        when(javaQuestionRepository.removeQuestion(Q_J_1))
+        when(mathQuestionRepository.removeQuestion(Q_M_1))
                 .thenReturn(question);
-        when(javaQuestionRepository.getAllQuestions())
+        when(mathQuestionRepository.getAllQuestions())
                 .thenReturn(allQuestions);
 
-        assertEquals(question, javaQuestionServiceImpl.addQuestion(Q_J_1, A_J_1));
-        assertEquals(question, javaQuestionServiceImpl.removeQuestion(Q_J_1));
-        assertEquals(allQuestions, javaQuestionServiceImpl.getAllQuestions());
+        assertEquals(question, mathQuestionServiceImpl.addQuestion(Q_M_1, A_M_1));
+        assertEquals(question, mathQuestionServiceImpl.removeQuestion(Q_M_1));
+        assertEquals(allQuestions, mathQuestionServiceImpl.getAllQuestions());
 
-        verify(javaQuestionRepository, times(1)).addQuestion(Q_J_1, A_J_1);
-        verify(javaQuestionRepository, times(1)).removeQuestion(Q_J_1);
-        verify(javaQuestionRepository, times(1)).getAllQuestions();
+        verify(mathQuestionRepository, times(1)).addQuestion(Q_M_1, A_M_1);
+        verify(mathQuestionRepository, times(1)).removeQuestion(Q_M_1);
+        verify(mathQuestionRepository, times(1)).getAllQuestions();
     }
 
     @Test
     @DisplayName("Тестирование выбрасывания исключения при вызове методов репозитория")
     public void shouldThrowExceptionWhenRepositoryThrowsExceptions() throws QuestionNotExistsException, AnswerAlreadyExistsException, QuestionAlreadyExistsException {
-        when(javaQuestionRepository.addQuestion(any(), any()))
+        when(mathQuestionRepository.addQuestion(any(), any()))
                 .thenThrow(AnswerAlreadyExistsException.class)
                 .thenThrow(QuestionAlreadyExistsException.class);
-        when(javaQuestionRepository.removeQuestion(any()))
+        when(mathQuestionRepository.removeQuestion(any()))
                 .thenThrow(QuestionNotExistsException.class);
 
-        assertThrows(AnswerAlreadyExistsException.class, () -> javaQuestionServiceImpl.addQuestion(Q_J_1, A_J_1));
-        assertThrows(QuestionAlreadyExistsException.class, () -> javaQuestionServiceImpl.addQuestion(Q_J_1, A_J_1));
-        assertThrows(QuestionNotExistsException.class, () -> javaQuestionServiceImpl.removeQuestion(Q_J_1));
+        assertThrows(AnswerAlreadyExistsException.class, () -> mathQuestionServiceImpl.addQuestion(Q_M_1, A_M_1));
+        assertThrows(QuestionAlreadyExistsException.class, () -> mathQuestionServiceImpl.addQuestion(Q_M_1, A_M_1));
+        assertThrows(QuestionNotExistsException.class, () -> mathQuestionServiceImpl.removeQuestion(Q_M_1));
     }
     @Test
     @DisplayName("Тестирование получения заданного количества вопросов")
     void shouldReturnCollectionOfQuestions() throws NotValidNumberException, NotEnoughQuestionException, QuestionNotExistsException {
         int numberToRequest = 3;
-        when(javaQuestionRepository.getAllQuestions()).thenReturn(JAVA_LIST);
-        Collection<Question> result = javaQuestionServiceImpl.getAmountOfQuestions(numberToRequest);
+        when(mathQuestionRepository.getAllQuestions()).thenReturn(MATH_LIST);
+        Collection<Question> result = mathQuestionServiceImpl.getAmountOfQuestions(numberToRequest);
 
         assertEquals(numberToRequest, result.size());
 
         for (Question question : result) {
-            assertTrue(JAVA_LIST.contains(question));
+            assertTrue(MATH_LIST.contains(question));
         }
     }
     @Test
     @DisplayName("Тестирование получения вопросов, когда список пустой")
     void shouldThrowExceptionByEmptyListTest() {
-        when(javaQuestionRepository.getAllQuestions()).thenReturn(new ArrayList<>());
-        assertThrows(QuestionNotExistsException.class, () -> javaQuestionServiceImpl.getAmountOfQuestions(1));
+        when(mathQuestionRepository.getAllQuestions()).thenReturn(new ArrayList<>());
+        assertThrows(QuestionNotExistsException.class, () -> mathQuestionServiceImpl.getAmountOfQuestions(1));
     }
     @Test
     @DisplayName("Тестирование получения вопросов при большем количестве, чем доступно")
     void shouldThrowExceptionByNotEnoughQuestions() {
         int tooManyQuestions = 10;
-        when(javaQuestionRepository.getAllQuestions()).thenReturn(JAVA_LIST);
-        assertThrows(NotEnoughQuestionException.class, () -> javaQuestionServiceImpl.getAmountOfQuestions(tooManyQuestions));
+        when(mathQuestionRepository.getAllQuestions()).thenReturn(MATH_LIST);
+        assertThrows(NotEnoughQuestionException.class, () -> mathQuestionServiceImpl.getAmountOfQuestions(tooManyQuestions));
     }
     @Test
     @DisplayName("Тестирование получения вопросов при невалидном числе")
     void shouldThrowExceptionNotValidNumber() {
         int invalidAmount = -1;
-        when(javaQuestionRepository.getAllQuestions()).thenReturn(JAVA_LIST);
-        assertThrows(NotValidNumberException.class, () -> javaQuestionServiceImpl.getAmountOfQuestions(invalidAmount));
+        when(mathQuestionRepository.getAllQuestions()).thenReturn(MATH_LIST);
+        assertThrows(NotValidNumberException.class, () -> mathQuestionServiceImpl.getAmountOfQuestions(invalidAmount));
     }
     @Test
     @DisplayName("Тестирование получения случайного вопроса из коллекции")
     void shouldGetRandomQuestion() {
-        when(javaQuestionRepository.getAllQuestions()).thenReturn(JAVA_LIST);
+        when(mathQuestionRepository.getAllQuestions()).thenReturn(MATH_LIST);
 
         Set<Question> uniqueQuestions = new HashSet<>();
         int totalAttempts = 100;
 
         for (int i = 0; i < totalAttempts; i++) {
-            uniqueQuestions.add(javaQuestionServiceImpl.getRandomQuestion());
+            uniqueQuestions.add(mathQuestionServiceImpl.getRandomQuestion());
         }
-        assertTrue(uniqueQuestions.contains(JAVA1));
-        assertTrue(uniqueQuestions.contains(JAVA2));
-        assertTrue(uniqueQuestions.contains(JAVA3));
-        assertTrue(uniqueQuestions.contains(JAVA4));
-        assertTrue(uniqueQuestions.contains(JAVA5));
+        assertTrue(uniqueQuestions.contains(MATH1));
+        assertTrue(uniqueQuestions.contains(MATH2));
+        assertTrue(uniqueQuestions.contains(MATH3));
+        assertTrue(uniqueQuestions.contains(MATH4));
+        assertTrue(uniqueQuestions.contains(MATH5));
     }
 }
