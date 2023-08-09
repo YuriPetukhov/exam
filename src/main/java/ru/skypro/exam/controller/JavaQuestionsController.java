@@ -22,7 +22,7 @@ public class JavaQuestionsController {
         this.questionService = questionService;
     }
     @GetMapping("/add")
-    public String addJavaQuestion(@RequestParam String question, @RequestParam String answer) throws AnswerAlreadyExistsException, QuestionAlreadyExistsException, MethodNotAllowedException {
+    public String addJavaQuestion(@RequestParam String question, @RequestParam String answer) throws QuestionAlreadyExistsException, MethodNotAllowedException {
         return "Вопрос успешно добавлен: " + questionService.addQuestion(question, answer);
     }
     @GetMapping("/remove")

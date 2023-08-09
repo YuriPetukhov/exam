@@ -52,14 +52,13 @@ public class TestData {
 
         return new Question(question, answer);
     }
-    public Question randomTestDataWithAnswer(){
+    public static Question randomTestDataWithAnswer(){
         Question question = randomTestData();
-        // В данном случае предполагается, что вопросы и ответы имеют поля text и answer соответственно
         question.setAnswer(question.getAnswer());
         return question;
     }
 
-    public Question randomNonExistingQuestion(){
+    public static Question randomNonExistingQuestion(){
         Faker faker = new Faker();
         String questionText = "Не существующий вопрос: " + faker.internet().uuid();
         return new Question(questionText, null);
