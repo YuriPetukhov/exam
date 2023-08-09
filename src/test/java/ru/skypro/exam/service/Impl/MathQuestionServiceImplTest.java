@@ -8,13 +8,12 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import ru.skypro.exam.exceptions.MethodNotAllowedException;
 import ru.skypro.exam.model.Question;
+import ru.skypro.exam.testData.TestData;
 
 import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
-import static ru.skypro.exam.constant.QuestionsConstants.A_M_1;
-import static ru.skypro.exam.constant.QuestionsConstants.Q_M_1;
 
 @ExtendWith(MockitoExtension.class)
 class MathQuestionServiceImplTest {
@@ -26,18 +25,19 @@ class MathQuestionServiceImplTest {
     @DisplayName("Тестирование вызова методов репозитория при добавлении, удалении, поиске, запросе количества и получении всех вопросов")
     void shouldCallRepositoryMethodsAndThrowMethodNotAllowedException() throws MethodNotAllowedException {
         MathQuestionServiceImpl mathQuestionService = Mockito.spy(new MathQuestionServiceImpl());
+        Question question = TestData.randomTestData();
 
-        doThrow(MethodNotAllowedException.class).when(mathQuestionService).addQuestion(Q_M_1, A_M_1);
-        assertThrows(MethodNotAllowedException.class, () -> mathQuestionService.addQuestion(Q_M_1, A_M_1));
-        verify(mathQuestionService, times(1)).addQuestion(Q_M_1, A_M_1);
+        doThrow(MethodNotAllowedException.class).when(mathQuestionService).addQuestion(question.getQuestion(), question.getAnswer());
+        assertThrows(MethodNotAllowedException.class, () -> mathQuestionService.addQuestion(question.getQuestion(), question.getAnswer()));
+        verify(mathQuestionService, times(1)).addQuestion(question.getQuestion(), question.getAnswer());
 
-        doThrow(MethodNotAllowedException.class).when(mathQuestionService).removeQuestion(Q_M_1);
-        assertThrows(MethodNotAllowedException.class, () -> mathQuestionService.removeQuestion(Q_M_1));
-        verify(mathQuestionService, times(1)).removeQuestion(Q_M_1);
+        doThrow(MethodNotAllowedException.class).when(mathQuestionService).removeQuestion(any());
+        assertThrows(MethodNotAllowedException.class, () -> mathQuestionService.removeQuestion(question));
+        verify(mathQuestionService, times(1)).removeQuestion(question);
 
-        doThrow(MethodNotAllowedException.class).when(mathQuestionService).findQuestion(Q_M_1);
-        assertThrows(MethodNotAllowedException.class, () -> mathQuestionService.findQuestion(Q_M_1));
-        verify(mathQuestionService, times(1)).findQuestion(Q_M_1);
+        doThrow(MethodNotAllowedException.class).when(mathQuestionService).findQuestion(question.getQuestion());
+        assertThrows(MethodNotAllowedException.class, () -> mathQuestionService.findQuestion(question.getQuestion()));
+        verify(mathQuestionService, times(1)).findQuestion(question.getQuestion());
 
         doThrow(MethodNotAllowedException.class).when(mathQuestionService).getAmountOfQuestions(5);
         assertThrows(MethodNotAllowedException.class, () -> mathQuestionService.getAmountOfQuestions(5));

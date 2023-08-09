@@ -11,6 +11,7 @@ import ru.skypro.exam.exceptions.NotEnoughQuestionException;
 import ru.skypro.exam.exceptions.NotValidNumberException;
 import ru.skypro.exam.model.Question;
 import ru.skypro.exam.service.QuestionService;
+import ru.skypro.exam.testData.TestData;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -18,19 +19,17 @@ import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
-import static ru.skypro.exam.constant.QuestionsConstants.*;
 
 @ExtendWith(MockitoExtension.class)
 public class ExaminerServiceImplTest {
 
     @Mock
     private QuestionService javaQuestionService;
-
     @Mock
     private QuestionService mathQuestionService;
-
     @InjectMocks
     private ExaminerServiceImpl examinerService;
+    private final int invalidAmount = -2;
 
     @BeforeEach
     public void setUp() {
@@ -39,13 +38,18 @@ public class ExaminerServiceImplTest {
         questionServices.add(mathQuestionService);
         examinerService = new ExaminerServiceImpl(questionServices);
     }
-
     @Test
     @DisplayName("Тестирование успешного получения вопросов")
     public void shouldGetQuestionsWhenEnoughQuestionsAvailable() throws NotValidNumberException, NotEnoughQuestionException, MethodNotAllowedException {
         int amount = 6;
-        when(javaQuestionService.getAllQuestions()).thenReturn(JAVA_LIST);
-        when(mathQuestionService.getAllQuestions()).thenReturn(MATH_LIST);
+        List<Question> javaQuestions = Stream.generate(TestData::randomTestData)
+                .limit(5)
+                .collect(Collectors.toList());
+        List<Question> mathQuestions = Stream.generate(TestData::randomTestData)
+                .limit(5)
+                .collect(Collectors.toList());
+        when(javaQuestionService.getAllQuestions()).thenReturn(javaQuestions);
+        when(mathQuestionService.getAllQuestions()).thenReturn(mathQuestions);
 
         List<Question> resultQuestions = examinerService.getQuestions(amount);
 
@@ -54,16 +58,22 @@ public class ExaminerServiceImplTest {
 
         assertEquals(amount, resultQuestions.size());
 
-        Set<Question> allQuestions = Stream.concat(JAVA_LIST.stream(), MATH_LIST.stream()).collect(Collectors.toSet());
+        Set<Question> allQuestions = Stream.concat(javaQuestions.stream(), mathQuestions.stream()).collect(Collectors.toSet());
         resultQuestions.forEach(question -> assertTrue(allQuestions.contains(question)));
     }
 
     @Test
     @DisplayName("Тестирование получения вопросов при большем количестве, чем доступно")
-    public void shouldThrowExceptionNotEnoughQuestionsAvailable() throws MethodNotAllowedException {
+    public void shouldThrowExceptionNotEnoughQuestions() throws MethodNotAllowedException {
         int amount = 16;
-        when(javaQuestionService.getAllQuestions()).thenReturn(JAVA_LIST);
-        when(mathQuestionService.getAllQuestions()).thenReturn(MATH_LIST);
+        List<Question> javaQuestions = Stream.generate(TestData::randomTestData)
+                .limit(5)
+                .collect(Collectors.toList());
+        List<Question> mathQuestions = Stream.generate(TestData::randomTestData)
+                .limit(5)
+                .collect(Collectors.toList());
+        when(javaQuestionService.getAllQuestions()).thenReturn(javaQuestions);
+        when(mathQuestionService.getAllQuestions()).thenReturn(mathQuestions);
 
         assertThrows(NotEnoughQuestionException.class, () -> {
             examinerService.getQuestions(amount);
@@ -73,21 +83,20 @@ public class ExaminerServiceImplTest {
     }
 
     @Test
-    @DisplayName("Тестирование получения вопросов, когда нет доступных вопросов")
-    public void shouldThrowExceptionByEmptyList() {
-        int amount = 5;
-
+    @DisplayName("Тестирование получения вопросов, когда список пустой")
+    public void shouldThrowExceptionByEmptyList() throws MethodNotAllowedException {
+        int amount = 15;
+        List<Question> questions = new ArrayList<>();
+        when(javaQuestionService.getAllQuestions()).thenReturn(questions);
+        when(mathQuestionService.getAllQuestions()).thenReturn(questions);
         assertThrows(NotEnoughQuestionException.class, () -> {
             examinerService.getQuestions(amount);
         });
     }
-
     @Test
     @DisplayName("Тестирование получения вопросов при невалидном числе")
-    public void shouldThrowExceptionNotValidNumber() {
-        int amount = -2;
-        assertThrows(NotValidNumberException.class, () -> {
-            examinerService.getQuestions(amount);
-        });
+    void shouldThrowExceptionNotValidNumber() {
+        assertThrows(NotValidNumberException.class, () ->
+                examinerService.getQuestions(invalidAmount));
     }
 }

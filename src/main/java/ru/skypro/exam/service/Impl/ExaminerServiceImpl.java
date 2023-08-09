@@ -27,23 +27,24 @@ public class ExaminerServiceImpl implements ExaminerService {
         if (!NumberValidator.isValidNumber(amount)) {
             throw new NotValidNumberException();
         }
-        Set<Question> questions = questionServices.stream()
-                .flatMap(questionService -> {
-                    try {
-                        return questionService.getAllQuestions().stream();
-                    } catch (MethodNotAllowedException e) {
-                        throw new RuntimeException(e);
-                    }
-                })
-                .collect(Collectors.toSet());
-        if (amount > questions.size()) {
+
+        List<Question> allQuestions = new ArrayList<>();
+
+        questionServices.forEach(questionService -> {
+            try {
+                allQuestions.addAll(questionService.getAllQuestions());
+            } catch (MethodNotAllowedException e) {
+                throw new RuntimeException(e);
+            }
+        });
+
+        if (amount > allQuestions.size()) {
             throw new NotEnoughQuestionException();
         }
-        List<Question> randomQuestions = new ArrayList<>(questions);
 
-        Collections.shuffle(randomQuestions);
+        Collections.shuffle(allQuestions);
 
-        return randomQuestions.stream()
+        return allQuestions.stream()
                 .limit(amount)
                 .collect(Collectors.toList());
     }

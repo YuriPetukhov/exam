@@ -26,8 +26,10 @@ public class JavaQuestionsController {
         return "Вопрос успешно добавлен: " + questionService.addQuestion(question, answer);
     }
     @GetMapping("/remove")
-    public String removeJavaQuestion(@RequestParam String question) throws QuestionNotExistsException, MethodNotAllowedException {
-        return "Вопрос успешно удален: " + questionService.removeQuestion(question);
+    public String removeJavaQuestion(@RequestParam String questionText, @RequestParam String answer) throws QuestionNotExistsException, MethodNotAllowedException {
+        Question question = new Question(questionText, answer);
+        Question removedQuestion = questionService.removeQuestion(question);
+        return "Вопрос успешно удален: " + removedQuestion.getQuestion();
     }
     @GetMapping("/find")
     public ResponseEntity<?> findJavaQuestion(@RequestParam String question) throws QuestionNotExistsException, MethodNotAllowedException {

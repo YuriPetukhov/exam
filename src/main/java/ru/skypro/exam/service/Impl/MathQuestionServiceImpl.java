@@ -17,9 +17,13 @@ public class MathQuestionServiceImpl implements QuestionService {
     public Question addQuestion(String question, String answer) throws MethodNotAllowedException {
         throw new MethodNotAllowedException();
     }
+    @Override
+    public Question addQuestion(Question question) throws MethodNotAllowedException {
+        throw new MethodNotAllowedException();
+    }
 
     @Override
-    public Question removeQuestion(String questionText) throws MethodNotAllowedException {
+    public Question removeQuestion(Question questionText) throws MethodNotAllowedException {
         throw new MethodNotAllowedException();
     }
 

@@ -1,10 +1,8 @@
 package ru.skypro.exam.service.Impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
-import ru.skypro.exam.Repository.JavaQuestionRepository;
-import ru.skypro.exam.Repository.QuestionRepository;
+import ru.skypro.exam.repository.JavaQuestionRepository;
 import ru.skypro.exam.exceptions.*;
 import ru.skypro.exam.model.Question;
 import ru.skypro.exam.service.QuestionService;
@@ -21,12 +19,19 @@ public class JavaQuestionServiceImpl implements QuestionService {
     }
 
     @Override
-    public Question addQuestion(String question, String answer) throws QuestionAlreadyExistsException, AnswerAlreadyExistsException {
-        return javaQuestionRepository.addQuestion(question, answer);
+    public Question addQuestion(String question, String answer) throws QuestionAlreadyExistsException {
+        Question newQuestion = new Question(question, answer);
+        return javaQuestionRepository.addQuestion(newQuestion);
     }
+
     @Override
-    public Question removeQuestion(String questionText) throws QuestionNotExistsException {
-        return javaQuestionRepository.removeQuestion(questionText);
+    public Question addQuestion(Question question) throws QuestionAlreadyExistsException {
+        return javaQuestionRepository.addQuestion(question);
+    }
+
+    @Override
+    public Question removeQuestion(Question question) throws QuestionNotExistsException {
+        return javaQuestionRepository.removeQuestion(question);
     }
 
     @Override
