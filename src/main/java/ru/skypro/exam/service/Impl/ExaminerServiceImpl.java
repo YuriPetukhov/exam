@@ -23,31 +23,80 @@ public class ExaminerServiceImpl implements ExaminerService {
     }
 
     @Override
-    public List<Question> getQuestions(int amount) throws NotEnoughQuestionException, NotValidNumberException {
-        if (!NumberValidator.isValidNumber(amount)) {
+    public List<Question> getQuestions(int amount) throws NotEnoughQuestionException, NotValidNumberException, MethodNotAllowedException {
+        if (!NumberValidator.isPositiveNumber(amount)) {
             throw new NotValidNumberException();
         }
 
-        List<Question> allQuestions = new ArrayList<>();
+        List<Question> javaQuestions = getJavaQuestions(amount);
 
-        questionServices.forEach(questionService -> {
-            try {
-                allQuestions.addAll(questionService.getAllQuestions());
-            } catch (MethodNotAllowedException e) {
-                throw new RuntimeException(e);
+        List<Question> mathQuestions = getMathQuestions(amount - javaQuestions.size());
+
+        List<Question> questions = new ArrayList<>(javaQuestions);
+        questions.addAll(mathQuestions);
+
+        Collections.shuffle(questions);
+
+        return questions;
+    }
+
+    private List<Question> getJavaQuestions(int amount) throws NotEnoughQuestionException, MethodNotAllowedException {
+        List<Question> javaQuestions = new ArrayList<>();
+
+        int javaQuestionsAmount = getAllJavaQuestionsAmount();
+
+        int limit = Math.min(amount, javaQuestionsAmount);
+
+        while (javaQuestions.size() < limit) {
+            Question randomQuestion = getRandomJavaQuestion();
+            if (javaQuestions.contains(randomQuestion)) {
+                continue;
             }
-        });
-
-        if (amount > allQuestions.size()) {
-            throw new NotEnoughQuestionException();
+            javaQuestions.add(randomQuestion);
         }
 
-        Collections.shuffle(allQuestions);
-
-        return allQuestions.stream()
-                .limit(amount)
-                .collect(Collectors.toList());
+        return javaQuestions;
     }
+
+    private int getAllJavaQuestionsAmount() throws MethodNotAllowedException {
+        int javaQuestionsAmount = 0;
+        for (QuestionService questionService : questionServices) {
+            if (questionService instanceof JavaQuestionServiceImpl) {
+                Collection<Question> allJavaQuestions = questionService.getAllQuestions();
+                javaQuestionsAmount += allJavaQuestions.size();
+            }
+        }
+        return javaQuestionsAmount;
+    }
+
+    private Question getRandomJavaQuestion() throws MethodNotAllowedException {
+        Question randomQuestion = null;
+        for (QuestionService questionService : questionServices) {
+            if (questionService instanceof JavaQuestionServiceImpl) {
+                randomQuestion = questionService.getRandomQuestion();
+                break;
+            }
+        }
+        return randomQuestion;
+    }
+
+    private List<Question> getMathQuestions(int amount) {
+        List<Question> mathQuestions = new ArrayList<>();
+
+        for (int i = 0; i < amount; i++) {
+            mathQuestions.add(getRandomMathQuestion());
+        }
+
+        return mathQuestions;
+    }
+
+    private Question getRandomMathQuestion() {
+        Random random = new Random();
+        String question = random.nextInt(10) + " + " + random.nextInt(10);
+        String answer = Integer.toString(Integer.parseInt(question.split(" ")[0]) + Integer.parseInt(question.split(" ")[2]));
+        return new Question(question, answer);
+    }
+
     @Override
     public Collection<Question> getAllQuestions() throws MethodNotAllowedException {
         List<Question> allQuestions = new ArrayList<>();

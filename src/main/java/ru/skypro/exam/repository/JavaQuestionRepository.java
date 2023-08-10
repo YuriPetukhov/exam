@@ -25,12 +25,14 @@ public class JavaQuestionRepository implements QuestionRepository{
 
     @Override
     public Question addQuestion(Question question) throws QuestionAlreadyExistsException {
-        String questionId = question.getId();
+        String questionText = question.getQuestion();
 
-        if (questions.containsKey(questionId)) {
+        boolean isDuplicateQuestion = questions.values().stream().anyMatch(q -> q.getQuestion().equals(questionText));
+
+        if (isDuplicateQuestion) {
             throw new QuestionAlreadyExistsException();
         }
-        questions.put(questionId, question);
+        questions.put(question.getId(), question);
         return question;
     }
 

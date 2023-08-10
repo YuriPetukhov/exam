@@ -26,9 +26,12 @@ public class MathQuestionController {
         return "Вопрос успешно добавлен: " + questionService.addQuestion(question, answer);
     }
     @GetMapping("/remove")
-    public String removeMathQuestion(@RequestParam String questionText, @RequestParam String answer) throws QuestionNotExistsException, MethodNotAllowedException {
-        Question question = new Question(questionText, answer);
-        Question removedQuestion = questionService.removeQuestion(question);
+    public String removeJavaQuestion(@RequestParam String question) throws QuestionNotExistsException, MethodNotAllowedException {
+        Question foundQuestion = questionService.findQuestion(question);
+        if (foundQuestion == null) {
+            throw new QuestionNotExistsException();
+        }
+        Question removedQuestion = questionService.removeQuestion(foundQuestion);
         return "Вопрос успешно удален: " + removedQuestion.getQuestion();
     }
     @GetMapping("/find")

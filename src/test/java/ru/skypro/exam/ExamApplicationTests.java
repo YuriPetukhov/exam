@@ -25,8 +25,12 @@ class ExamApplicationTests {
 	@Test
 	void sendHttpRequestsToTestLinks() {
 		List<String> testLinks = readTestLinksFromFile("/test-links.txt");
+		List<String> comments = readCommentsFromFile("/test-links.txt");
 
-		for (String link : testLinks) {
+		for (int i = 0; i < testLinks.size(); i++) {
+			String link = testLinks.get(i);
+			String comment = comments.get(i);
+
 			try (CloseableHttpClient httpClient = HttpClients.createDefault()) {
 				HttpGet httpGet = new HttpGet(link);
 				try (CloseableHttpResponse response = httpClient.execute(httpGet)) {
@@ -34,6 +38,7 @@ class ExamApplicationTests {
 							new InputStreamReader(response.getEntity().getContent()))
 							.lines().collect(Collectors.joining("\n"));
 
+					System.out.println(comment);
 					System.out.println(responseBody);
 				}
 			} catch (IOException e) {
@@ -42,14 +47,16 @@ class ExamApplicationTests {
 		}
 	}
 
-	private static List<String> readTestLinksFromFile(String fileName) {
+	private List<String> readTestLinksFromFile(String filePath) {
 		List<String> testLinks = new ArrayList<>();
 
-		try (InputStream inputStream = ExamApplication.class.getResourceAsStream(fileName);
+		try (InputStream inputStream = ExamApplication.class.getResourceAsStream(filePath);
 			 BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream))) {
 			String line;
 			while ((line = reader.readLine()) != null) {
-				testLinks.add(line);
+				if (!line.startsWith("#")) {
+					testLinks.add(line);
+				}
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -57,4 +64,37 @@ class ExamApplicationTests {
 
 		return testLinks;
 	}
+
+	private List<String> readCommentsFromFile(String filePath) {
+		List<String> comments = new ArrayList<>();
+
+		try (InputStream inputStream = ExamApplication.class.getResourceAsStream(filePath);
+			 BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream))) {
+			String line;
+			while ((line = reader.readLine()) != null) {
+				if (line.startsWith("#")) {
+					comments.add(line);
+				}
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		return comments;
+	}
+//	private static List<String> readTestLinksFromFile(String fileName) {
+//		List<String> testLinks = new ArrayList<>();
+//
+//		try (InputStream inputStream = ExamApplication.class.getResourceAsStream(fileName);
+//			 BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream))) {
+//			String line;
+//			while ((line = reader.readLine()) != null) {
+//				testLinks.add(line);
+//			}
+//		} catch (IOException e) {
+//			e.printStackTrace();
+//		}
+//
+//		return testLinks;
+//	}
 }

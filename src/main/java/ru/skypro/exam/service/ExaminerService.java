@@ -10,7 +10,7 @@ import java.util.Collection;
 import java.util.List;
 
 public interface ExaminerService {
-    List<Question> getQuestions(int amount) throws NotEnoughQuestionException, NotValidNumberException;
+    List<Question> getQuestions(int amount) throws NotEnoughQuestionException, NotValidNumberException, MethodNotAllowedException;
 
     Collection<Question> getAllQuestions() throws MethodNotAllowedException;
 }

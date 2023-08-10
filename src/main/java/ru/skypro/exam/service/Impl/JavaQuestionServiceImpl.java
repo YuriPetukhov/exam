@@ -57,7 +57,7 @@ public class JavaQuestionServiceImpl implements QuestionService {
         if (questionList.isEmpty()) {
             throw new QuestionNotExistsException();
         }
-        if (!NumberValidator.isValidNumber(amount)) {
+        if (!NumberValidator.isPositiveNumber (amount)) {
             throw new NotValidNumberException();
         }
         if (amount > questionList.size()) {
