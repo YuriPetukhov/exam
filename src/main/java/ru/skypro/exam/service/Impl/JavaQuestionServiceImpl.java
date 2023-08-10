@@ -7,79 +7,80 @@ import ru.skypro.exam.service.QuestionService;
 import ru.skypro.exam.validation.NumberValidator;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class JavaQuestionServiceImpl implements QuestionService {
-    private final Collection<Question> questions = new HashSet<>();
-
-    @Override
-    public Question addJavaQuestion(String question, String answer) throws QuestionAlreadyExistsException, AnswerAlreadyExistsException {
-        boolean questionExists = questions.stream().anyMatch(existingQuestion -> existingQuestion.getQuestion().equals(question));
-        boolean answerExists = questions.stream().anyMatch(existingQuestion -> existingQuestion.getAnswer().equals(answer));
-
-        if (questionExists || answerExists) {
-            if (questionExists) {
-                throw new QuestionAlreadyExistsException();
-            } else {
-                throw new AnswerAlreadyExistsException();
-            }
-        }
-
-        Question newQuestion = new Question(question, answer);
-        questions.add(newQuestion);
-        return newQuestion;
+    private final Map<String, String> questions;
+    public JavaQuestionServiceImpl() {
+        this.questions = new HashMap<>();
     }
-
     @Override
-    public Question removeJavaQuestion(String questionText) throws QuestionNotExistsException {
-        Optional<Question> removedQuestion = questions.stream()
-                .filter(existingQuestion -> existingQuestion.getQuestion().equals(questionText))
-                .findFirst();
-        if (removedQuestion.isPresent()) {
-            questions.remove(removedQuestion.get());
-            return removedQuestion.get();
-        } else {
+    public Question addJavaQuestion(String question, String answer) throws QuestionAlreadyExistsException {
+        if (questions.containsKey(question)) {
+            throw new QuestionAlreadyExistsException();
+        }
+        questions.put(question, answer);
+        return new Question(question, answer);
+    }
+    @Override
+    public Question addJavaQuestion(Question question) throws QuestionAlreadyExistsException {
+        if (questions.containsKey(question.getQuestion())) {
+            throw new QuestionAlreadyExistsException();
+        }
+        questions.put(question.getQuestion(), question.getAnswer());
+        return new Question(question.getQuestion(), question.getAnswer());
+    }
+    @Override
+    public Question removeJavaQuestion(Question question) throws QuestionNotExistsException {
+        Question foundQuestion = findJavaQuestion(question.getQuestion());
+        if (foundQuestion == null) {
             throw new QuestionNotExistsException();
         }
+        questions.remove(question.getQuestion());
+        return foundQuestion;
     }
-
     @Override
     public Question findJavaQuestion(String question) {
-        Optional<Question> foundQuestion = questions.stream()
-                .filter(existingQuestion -> existingQuestion.getQuestion().equals(question))
-                .findFirst();
-        return foundQuestion.orElse(null);
+        if (questions.containsKey(question)) {
+            String answer = questions.get(question);
+            return new Question(question, answer);
+        } else {
+            return null;
+        }
     }
-
     @Override
     public Question getRandomJavaQuestion() {
-        return questions.stream()
-                .skip(new Random().nextInt(questions.size()))
-                .findFirst()
-                .orElse(null);
+        if (questions.isEmpty()) {
+            return null;
+        }
+        int randomIndex = new Random().nextInt(questions.size());
+        Map.Entry<String, String> randomEntry =
+                new ArrayList<>(questions.entrySet()).get(randomIndex);
+        return new Question(randomEntry.getKey(), randomEntry.getValue());
     }
-
     @Override
     public Collection<Question> getAmountOfJavaQuestions(int amount) throws QuestionNotExistsException, NotValidNumberException, NotEnoughQuestionException {
-        List<Question> questionList = new ArrayList<>(questions);
-
-        if (questionList.isEmpty()) {
+        if (questions.isEmpty()) {
             throw new QuestionNotExistsException();
         }
-
         if (!NumberValidator.isValidNumber(amount)) {
             throw new NotValidNumberException();
         }
-
-        if (amount > questionList.size()) {
+        if (amount > questions.size()) {
             throw new NotEnoughQuestionException();
         }
-
+        List<Question> questionList = questions.entrySet().stream()
+                .map(entry -> new Question(entry.getKey(), entry.getValue()))
+                .collect(Collectors.toList());
         Collections.shuffle(questionList);
         return questionList.subList(0, Math.min(amount, questionList.size()));
     }
+
     @Override
     public Collection<Question> getAllJavaQuestions() {
-        return questions;
+        return questions.entrySet().stream()
+                .map(entry -> new Question(entry.getKey(), entry.getValue()))
+                .collect(Collectors.toList());
     }
 }

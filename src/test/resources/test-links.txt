@@ -4,14 +4,13 @@ http://localhost:8080/exam/java/add?question=question3j&answer=answer3
 http://localhost:8080/exam/java/add?question=question4j&answer=answer4
 http://localhost:8080/exam/java/add?question=question5j&answer=answer5
 http://localhost:8080/exam/java/add?question=question1j&answer=answer6
-http://localhost:8080/exam/java/add?question=question6j&answer=answer1
 http://localhost:8080/exam/java/getAll
 http://localhost:8080/exam/java/get/amount?amount=4
 http://localhost:8080/exam/java/get/amount?amount=0
 http://localhost:8080/exam/java/get/amount?amount=-2
 http://localhost:8080/exam/java/get/amount?amount=10
-http://localhost:8080/exam/java/remove?question=question1j
-http://localhost:8080/exam/java/remove?question=question1j
+http://localhost:8080/exam/java/remove?question=question1j&answer=answer1
+http://localhost:8080/exam/java/remove?question=question1j&answer=answer1
 http://localhost:8080/exam/java/getAll
 http://localhost:8080/exam/java/random
 http://localhost:8080/exam/java/random

@@ -24,21 +24,21 @@ public class ExaminerServiceImpl implements ExaminerService {
         if (!NumberValidator.isValidNumber(amount)) {
             throw new NotValidNumberException();
         }
+        List<Question> javaQuestions = new ArrayList<>(questionService.getAllJavaQuestions());
 
-        List<Question> availableQuestions = new ArrayList<>(questionService.getAllJavaQuestions());
-
-        if (amount > availableQuestions.size()) {
+        if (amount > javaQuestions.size()) {
             throw new NotEnoughQuestionException();
         }
+        List<Question> selectionPool = new ArrayList<>(javaQuestions);
+        Set<Question> selectedQuestions = new HashSet<>();
 
-        List<Question> randomQuestions = new ArrayList<>();
-        while (randomQuestions.size() < amount){
+        while (selectedQuestions.size() < amount && !selectionPool.isEmpty()) {
             Question randomQuestion = questionService.getRandomJavaQuestion();
-            if (!randomQuestions.contains(randomQuestion)) {
-                randomQuestions.add(randomQuestion);
+            if (selectionPool.contains(randomQuestion)) {
+                selectedQuestions.add(randomQuestion);
+                selectionPool.remove(randomQuestion);
             }
         }
-
-        return randomQuestions;
+        return selectedQuestions;
     }
 }

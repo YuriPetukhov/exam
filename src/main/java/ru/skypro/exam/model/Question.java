@@ -31,11 +31,9 @@ public class Question {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-
         Question question1 = (Question) o;
-
-        if (!question.equals(question1.question)) return false;
-        return answer.equals(question1.answer);
+        return Objects.equals(question, question1.question) &&
+                Objects.equals(answer, question1.answer);
     }
 
     @Override
