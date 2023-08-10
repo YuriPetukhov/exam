@@ -25,4 +25,5 @@ public class ExaminerServiceController {
     public Collection<Question> getQuestions(@RequestParam int amount) throws NotEnoughQuestionException, NotValidNumberException, MethodNotAllowedException {
         return examinerService.getQuestions(amount);
     }
+
 }

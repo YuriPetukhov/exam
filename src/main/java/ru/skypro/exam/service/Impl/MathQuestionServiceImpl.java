@@ -10,6 +10,7 @@ import java.util.*;
 @Service("mathQuestionService")
 public class MathQuestionServiceImpl implements QuestionService {
     private final Random random = new Random();
+
     public MathQuestionServiceImpl() {
     }
 

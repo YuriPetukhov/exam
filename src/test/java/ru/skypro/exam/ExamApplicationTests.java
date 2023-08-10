@@ -23,7 +23,7 @@ class ExamApplicationTests {
 	}
 
 	@Test
-	void sendHttpRequestsToTestLinks() {
+	void sendHttpRequestsToTestLinks() throws IOException {
 		List<String> testLinks = readTestLinksFromFile();
 		List<String> comments = readCommentsFromFile();
 
@@ -41,13 +41,11 @@ class ExamApplicationTests {
 					System.out.println(comment);
 					System.out.println(responseBody);
 				}
-			} catch (IOException e) {
-				e.printStackTrace();
 			}
 		}
 	}
 
-	private List<String> readTestLinksFromFile() {
+	private List<String> readTestLinksFromFile() throws IOException {
 		List<String> testLinks = new ArrayList<>();
 
 		try (InputStream inputStream = ExamApplication.class.getResourceAsStream("/test-links.txt")) {
@@ -60,30 +58,25 @@ class ExamApplicationTests {
                     }
                 }
             }
-        } catch (IOException e) {
-			e.printStackTrace();
-		}
+        }
 
 		return testLinks;
 	}
 
-	private List<String> readCommentsFromFile() {
+	private List<String> readCommentsFromFile() throws IOException {
 		List<String> comments = new ArrayList<>();
 
 		try (InputStream inputStream = ExamApplication.class.getResourceAsStream("/test-links.txt")) {
-            assert inputStream != null;
-            try (BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream))) {
-                String line;
-                while ((line = reader.readLine()) != null) {
-                    if (line.startsWith("#")) {
-                        comments.add(line);
-                    }
-                }
-            }
-        } catch (IOException e) {
-			e.printStackTrace();
+			assert inputStream != null;
+			try (BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream))) {
+				String line;
+				while ((line = reader.readLine()) != null) {
+					if (line.startsWith("#")) {
+						comments.add(line);
+					}
+				}
+			}
 		}
-
 		return comments;
 	}
 }

@@ -65,4 +65,5 @@ class MathQuestionServiceImplTest {
 
         assertTrue(uniqueQuestions.size() > 1, "Сгенерированные вопросы должны отличаться");
     }
+
 }

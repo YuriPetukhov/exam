@@ -70,4 +70,5 @@ public class JavaQuestionServiceImpl implements QuestionService {
     public Collection<Question> getAllQuestions() {
         return javaQuestionRepository.getAllQuestions();
     }
+
 }
