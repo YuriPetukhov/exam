@@ -16,31 +16,28 @@ public class JavaQuestionServiceImpl implements QuestionService {
     public JavaQuestionServiceImpl(JavaQuestionRepository javaQuestionRepository) {
         this.javaQuestionRepository = javaQuestionRepository;
     }
-
     @Override
-    public Question addQuestion(String question, String answer) throws QuestionAlreadyExistsException, AnswerAlreadyExistsException {
+    public Question addQuestion(String question, String answer) throws QuestionAlreadyExistsException {
         return javaQuestionRepository.addQuestion(question, answer);
     }
-    @Override
-    public Question removeQuestion(String questionText) throws QuestionNotExistsException {
-        return javaQuestionRepository.removeQuestion(questionText);
-    }
 
     @Override
-    public Question findQuestion(String question) {
-        Optional<Question> foundQuestion = getAllQuestions().stream()
-                .filter(existingQuestion -> existingQuestion.getQuestion().equals(question))
-                .findFirst();
-        return foundQuestion.orElse(null);
+    public Question addQuestion(Question question) throws QuestionAlreadyExistsException {
+        return javaQuestionRepository.addQuestion(question);
+    }
+    @Override
+    public Question removeQuestion(Question question) throws QuestionNotExistsException {
+        return javaQuestionRepository.removeQuestion(question);
     }
 
     @Override
     public Question getRandomQuestion() {
-        Collection<Question> allQuestions = getAllQuestions();
-        return allQuestions.stream()
-                .skip(new Random().nextInt(allQuestions.size()))
-                .findFirst()
-                .orElse(null);
+        return javaQuestionRepository.getRandomQuestion();
+    }
+
+    @Override
+    public Question findQuestion(String question) {
+        return javaQuestionRepository.findQuestion(question);
     }
     @Override
     public Collection<Question> getAmountOfQuestions(int amount) throws QuestionNotExistsException, NotValidNumberException, NotEnoughQuestionException {

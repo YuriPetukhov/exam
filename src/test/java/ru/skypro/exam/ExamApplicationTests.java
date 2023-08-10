@@ -23,10 +23,14 @@ class ExamApplicationTests {
 	}
 
 	@Test
-	void sendHttpRequestsToTestLinks() {
-		List<String> testLinks = readTestLinksFromFile("/test-links.txt");
+	void sendHttpRequestsToTestLinks() throws IOException {
+		List<String> testLinks = readTestLinksFromFile();
+		List<String> comments = readCommentsFromFile();
 
-		for (String link : testLinks) {
+		for (int i = 0; i < testLinks.size(); i++) {
+			String link = testLinks.get(i);
+			String comment = comments.get(i);
+
 			try (CloseableHttpClient httpClient = HttpClients.createDefault()) {
 				HttpGet httpGet = new HttpGet(link);
 				try (CloseableHttpResponse response = httpClient.execute(httpGet)) {
@@ -34,27 +38,45 @@ class ExamApplicationTests {
 							new InputStreamReader(response.getEntity().getContent()))
 							.lines().collect(Collectors.joining("\n"));
 
+					System.out.println(comment);
 					System.out.println(responseBody);
 				}
-			} catch (IOException e) {
-				e.printStackTrace();
 			}
 		}
 	}
 
-	private static List<String> readTestLinksFromFile(String fileName) {
+	private List<String> readTestLinksFromFile() throws IOException {
 		List<String> testLinks = new ArrayList<>();
 
-		try (InputStream inputStream = ExamApplication.class.getResourceAsStream(fileName);
-			 BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream))) {
-			String line;
-			while ((line = reader.readLine()) != null) {
-				testLinks.add(line);
+		try (InputStream inputStream = ExamApplication.class.getResourceAsStream("/test-links.txt")) {
+			assert inputStream != null;
+			try (BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream))) {
+				String line;
+				while ((line = reader.readLine()) != null) {
+					if (!line.startsWith("#")) {
+						testLinks.add(line);
+					}
+				}
 			}
-		} catch (IOException e) {
-			e.printStackTrace();
 		}
 
 		return testLinks;
+	}
+
+	private List<String> readCommentsFromFile() throws IOException {
+		List<String> comments = new ArrayList<>();
+
+		try (InputStream inputStream = ExamApplication.class.getResourceAsStream("/test-links.txt")) {
+			assert inputStream != null;
+			try (BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream))) {
+				String line;
+				while ((line = reader.readLine()) != null) {
+					if (line.startsWith("#")) {
+						comments.add(line);
+					}
+				}
+			}
+		}
+		return comments;
 	}
 }

@@ -6,7 +6,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import ru.skypro.exam.exceptions.NotEnoughQuestionException;
 import ru.skypro.exam.exceptions.NotValidNumberException;
-import ru.skypro.exam.exceptions.QuestionNotExistsException;
 import ru.skypro.exam.model.Question;
 import ru.skypro.exam.service.ExaminerService;
 

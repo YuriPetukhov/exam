@@ -6,7 +6,10 @@ import ru.skypro.exam.model.Question;
 import java.util.Collection;
 
 public interface QuestionRepository {
-    Question addQuestion(String question, String answer) throws QuestionAlreadyExistsException, AnswerAlreadyExistsException;
-    Question removeQuestion(String question) throws QuestionNotExistsException;
+    Question addQuestion(String question, String answer) throws QuestionAlreadyExistsException;
+    Question addQuestion(Question question) throws QuestionAlreadyExistsException;
+    Question removeQuestion(Question question) throws QuestionNotExistsException;
+    Question findQuestion(String question);
     Collection<Question> getAllQuestions();
+    Question getRandomQuestion();
 }

@@ -3,7 +3,6 @@ package ru.skypro.exam.Repository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import ru.skypro.exam.exceptions.AnswerAlreadyExistsException;
 import ru.skypro.exam.exceptions.QuestionAlreadyExistsException;
 import ru.skypro.exam.exceptions.QuestionNotExistsException;
 import ru.skypro.exam.model.Question;
@@ -26,7 +25,7 @@ class MathQuestionRepositoryTest {
 
     @Test
     @DisplayName("Тестирование добавления нового вопроса")
-    public void shouldAddNewQuestion() throws QuestionAlreadyExistsException, AnswerAlreadyExistsException {
+    public void shouldAddNewQuestion() throws QuestionAlreadyExistsException {
         Question addedQuestion = repository.addQuestion(Q_M_6, A_M_6);
         assertTrue(questions.contains(addedQuestion));
     }
@@ -37,23 +36,16 @@ class MathQuestionRepositoryTest {
         MathQuestionRepository repository = new MathQuestionRepository(questions);
         assertThrows(QuestionAlreadyExistsException.class, () -> repository.addQuestion(Q_M_1, A_M_1));
     }
-
-    @Test
-    @DisplayName("Тестирование добавления вопроса при наличии ответа")
-    public void shouldThrowAnswerAlreadyExistsException() {
-        MathQuestionRepository repository = new MathQuestionRepository(questions);
-        assertThrows(AnswerAlreadyExistsException.class, () -> repository.addQuestion(Q_M_6, A_M_1));
-    }
     @Test
     @DisplayName("Тестирование удаления вопроса")
     public void shouldRemoveQuestion() throws QuestionNotExistsException {
-        Question removedQuestion = repository.removeQuestion(Q_M_1);
+        Question removedQuestion = repository.removeQuestion(MATH1);
         assertFalse(questions.contains(removedQuestion));
     }
     @Test
     @DisplayName("Тестирование удаления несуществующего вопроса")
     public void shouldThrowQuestionNotExistsException() {
-        assertThrows(QuestionNotExistsException.class, () -> repository.removeQuestion(Q_M_6));
+        assertThrows(QuestionNotExistsException.class, () -> repository.removeQuestion(MATH6));
     }
     @Test
     @DisplayName("Тестирование получения всех вопросов")

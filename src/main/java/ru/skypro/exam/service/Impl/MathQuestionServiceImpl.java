@@ -16,14 +16,18 @@ public class MathQuestionServiceImpl implements QuestionService {
     public MathQuestionServiceImpl(MathQuestionRepository mathQuestionRepository) {
         this.mathQuestionRepository = mathQuestionRepository;
     }
-
     @Override
-    public Question addQuestion(String question, String answer) throws QuestionAlreadyExistsException, AnswerAlreadyExistsException {
+    public Question addQuestion(String question, String answer) throws QuestionAlreadyExistsException {
         return mathQuestionRepository.addQuestion(question, answer);
     }
 
     @Override
-    public Question removeQuestion(String questionText) throws QuestionNotExistsException {
+    public Question addQuestion(Question question) throws QuestionAlreadyExistsException {
+        return mathQuestionRepository.addQuestion(question);
+    }
+
+    @Override
+    public Question removeQuestion(Question questionText) throws QuestionNotExistsException {
         return mathQuestionRepository.removeQuestion(questionText);
     }
 

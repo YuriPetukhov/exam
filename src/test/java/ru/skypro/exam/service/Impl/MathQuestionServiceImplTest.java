@@ -28,39 +28,37 @@ class MathQuestionServiceImplTest {
     private List<Question> questions;
     @Test
     @DisplayName("Тестирование вызова методов репозитория при добавлении, удалении и получении всех вопросов")
-    void shouldCallRepositoryMethodWhenAddRemoveAndGetAllQuestion() throws AnswerAlreadyExistsException, QuestionAlreadyExistsException, QuestionNotExistsException {
+    void shouldCallRepositoryMethodWhenAddRemoveAndGetAllQuestion() throws QuestionAlreadyExistsException, QuestionNotExistsException {
         Question question = new Question(Q_M_1, A_M_1);
         List<Question> allQuestions = new ArrayList<>();
         allQuestions.add(question);
 
         when(mathQuestionRepository.addQuestion(Q_M_1, A_M_1))
                 .thenReturn(question);
-        when(mathQuestionRepository.removeQuestion(Q_M_1))
+        when(mathQuestionRepository.removeQuestion(MATH1))
                 .thenReturn(question);
         when(mathQuestionRepository.getAllQuestions())
                 .thenReturn(allQuestions);
 
         assertEquals(question, mathQuestionServiceImpl.addQuestion(Q_M_1, A_M_1));
-        assertEquals(question, mathQuestionServiceImpl.removeQuestion(Q_M_1));
+        assertEquals(question, mathQuestionServiceImpl.removeQuestion(MATH1));
         assertEquals(allQuestions, mathQuestionServiceImpl.getAllQuestions());
 
         verify(mathQuestionRepository, times(1)).addQuestion(Q_M_1, A_M_1);
-        verify(mathQuestionRepository, times(1)).removeQuestion(Q_M_1);
+        verify(mathQuestionRepository, times(1)).removeQuestion(MATH1);
         verify(mathQuestionRepository, times(1)).getAllQuestions();
     }
 
     @Test
     @DisplayName("Тестирование выбрасывания исключения при вызове методов репозитория")
-    public void shouldThrowExceptionWhenRepositoryThrowsExceptions() throws QuestionNotExistsException, AnswerAlreadyExistsException, QuestionAlreadyExistsException {
+    public void shouldThrowExceptionWhenRepositoryThrowsExceptions() throws QuestionNotExistsException, QuestionAlreadyExistsException {
         when(mathQuestionRepository.addQuestion(any(), any()))
-                .thenThrow(AnswerAlreadyExistsException.class)
                 .thenThrow(QuestionAlreadyExistsException.class);
         when(mathQuestionRepository.removeQuestion(any()))
                 .thenThrow(QuestionNotExistsException.class);
 
-        assertThrows(AnswerAlreadyExistsException.class, () -> mathQuestionServiceImpl.addQuestion(Q_M_1, A_M_1));
         assertThrows(QuestionAlreadyExistsException.class, () -> mathQuestionServiceImpl.addQuestion(Q_M_1, A_M_1));
-        assertThrows(QuestionNotExistsException.class, () -> mathQuestionServiceImpl.removeQuestion(Q_M_1));
+        assertThrows(QuestionNotExistsException.class, () -> mathQuestionServiceImpl.removeQuestion(MATH1));
     }
     @Test
     @DisplayName("Тестирование получения заданного количества вопросов")

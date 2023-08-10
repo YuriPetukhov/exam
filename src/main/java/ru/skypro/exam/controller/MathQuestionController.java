@@ -22,12 +22,14 @@ public class MathQuestionController {
         this.questionService = questionService;
     }
     @GetMapping("/add")
-    public String addMathQuestion(@RequestParam String question, @RequestParam String answer) throws AnswerAlreadyExistsException, QuestionAlreadyExistsException {
+    public String addMathQuestion(@RequestParam String question, @RequestParam String answer) throws QuestionAlreadyExistsException {
         return "Вопрос успешно добавлен: " + questionService.addQuestion(question, answer);
     }
     @GetMapping("/remove")
-    public String removeMathQuestion(@RequestParam String question) throws QuestionNotExistsException {
-        return "Вопрос успешно удален: " + questionService.removeQuestion(question);
+    public String removeMathQuestion(@RequestParam String question, @RequestParam String answer) throws QuestionNotExistsException {
+        Question questionToRemove = new Question(question, answer);
+        Question removedQuestion = questionService.removeQuestion(questionToRemove);
+        return "Вопрос успешно удален: " + removedQuestion.getQuestion();
     }
     @GetMapping("/find")
     public ResponseEntity<?> findMathQuestion(@RequestParam String question) throws QuestionNotExistsException {
