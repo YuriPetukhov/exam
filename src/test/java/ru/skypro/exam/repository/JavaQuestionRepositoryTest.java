@@ -11,9 +11,7 @@ import ru.skypro.exam.exceptions.QuestionNotExistsException;
 import ru.skypro.exam.model.Question;
 import ru.skypro.exam.testData.TestData;
 
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 @ExtendWith(SpringExtension.class)
@@ -24,12 +22,15 @@ class JavaQuestionRepositoryTest {
 
     @BeforeEach
     public void setUp() {
-        questions = new HashSet<>();
+        Comparator<Question> questionComparator = Comparator.comparing(Question::getQuestion);
+        questions = (questions == null) ? new TreeSet<>(questionComparator) : questions;
+        questions.clear();
         for (int i = 0; i < 15; i++) {
             Question question = TestData.randomTestData();
             questions.add(question);
         }
-        repository = new JavaQuestionRepository();
+        repository = (repository == null) ? new JavaQuestionRepository() : repository;
+        repository.getQuestions().clear();
 
         for (Question question : questions) {
             try {
@@ -39,11 +40,13 @@ class JavaQuestionRepositoryTest {
         }
     }
     @Test
-    @DisplayName("Тестирование добавления нового вопроса")
-    public void shouldAddNewQuestion() throws QuestionAlreadyExistsException {
+    @DisplayName("Тестирование добавления нового вопроса в пустую коллекцию")
+    public void shouldAddNewQuestionToEmptyCollection() throws QuestionAlreadyExistsException {
+        JavaQuestionRepository emptyRepository = new JavaQuestionRepository();
         Question newQuestion = TestData.randomTestData();
-        Question addedQuestion = repository.addQuestion(newQuestion);
-        assertEquals(addedQuestion, repository.getQuestions().get(addedQuestion.getId()));
+
+        Question addedQuestion = emptyRepository.addQuestion(newQuestion);
+        assertEquals(addedQuestion, emptyRepository.getQuestions().get(addedQuestion.getId()));
     }
 
     @Test

@@ -8,10 +8,14 @@ import ru.skypro.exam.exceptions.MethodNotAllowedException;
 import ru.skypro.exam.exceptions.NotEnoughQuestionException;
 import ru.skypro.exam.exceptions.NotValidNumberException;
 import ru.skypro.exam.exceptions.QuestionNotExistsException;
+import ru.skypro.exam.formatter.QuestionFormatter;
 import ru.skypro.exam.model.Question;
 import ru.skypro.exam.service.ExaminerService;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
+
 @RestController
 @RequestMapping("/exam")
 public class ExaminerServiceController {
@@ -22,8 +26,16 @@ public class ExaminerServiceController {
     }
 
     @GetMapping("/questions")
-    public Collection<Question> getQuestions(@RequestParam int amount) throws NotEnoughQuestionException, NotValidNumberException, MethodNotAllowedException {
-        return examinerService.getQuestions(amount);
-    }
+    public Collection<String> getQuestions(@RequestParam int amount) throws NotEnoughQuestionException, NotValidNumberException, MethodNotAllowedException, QuestionNotExistsException {
+        Collection<Question> questions = examinerService.getQuestions(amount);
 
+        List<String> formattedQuestions = new ArrayList<>();
+
+        int questionNumber = 1;
+        for (Question question : questions) {
+            formattedQuestions.add(QuestionFormatter.formatQuestion(question, questionNumber));
+            questionNumber++;
+        }
+        return formattedQuestions;
+    }
 }

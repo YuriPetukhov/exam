@@ -4,6 +4,7 @@ import org.springframework.stereotype.Service;
 import ru.skypro.exam.exceptions.*;
 import ru.skypro.exam.model.Question;
 import ru.skypro.exam.service.QuestionService;
+import ru.skypro.exam.validation.NumberValidator;
 
 import java.util.*;
 
@@ -42,12 +43,25 @@ public class MathQuestionServiceImpl implements QuestionService {
 
 
     @Override
-    public Collection<Question> getAmountOfQuestions(int amount) throws MethodNotAllowedException {
-        throw new MethodNotAllowedException();
+    public List<Question> getAmountOfQuestions(int amount) throws NotValidNumberException {
+        if (amount == 0) {
+            return new ArrayList<>();
+        }
+        if (!NumberValidator.isPositiveNumber(amount)) {
+            throw new NotValidNumberException();
+        }
+
+        Set<Question> resultSet = new HashSet<>();
+        while (resultSet.size() < amount) {
+            Question randomQuestion = getRandomQuestion();
+            resultSet.add(randomQuestion);
+        }
+
+        return new ArrayList<>(resultSet);
     }
 
     @Override
-    public Collection<Question> getAllQuestions() throws MethodNotAllowedException {
+    public List<Question> getAllQuestions() throws MethodNotAllowedException {
         throw new MethodNotAllowedException();
     }
 }

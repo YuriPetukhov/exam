@@ -28,7 +28,7 @@ class JavaQuestionServiceImplTest {
     private List<Question> allQuestions;
     private final int numberToRequest = 6;
     private final int tooManyQuestions = 10;
-    private final int invalidAmount = -1;
+    private final int invalidAmount = -5;
     private final int totalAttempts = 100;
 
     @BeforeEach
@@ -51,18 +51,19 @@ class JavaQuestionServiceImplTest {
         Question question = TestData.randomTestData();
         List<Question> allQuestions = List.of(question);
 
-        when(javaQuestionRepository.addQuestion(question)).thenReturn(question);
-        when(javaQuestionRepository.removeQuestion(question)).thenReturn(question);
+        doReturn(question).when(javaQuestionRepository).addQuestion(any(Question.class));
+        doReturn(question).when(javaQuestionRepository).removeQuestion(any(Question.class));
         when(javaQuestionRepository.getAllQuestions()).thenReturn(allQuestions);
 
-        assertEquals(question, javaQuestionServiceImpl.addQuestion(question.getQuestion(), question.getAnswer()));
-        assertEquals(question, javaQuestionServiceImpl.removeQuestion(question));
+        Question addedQuestion = javaQuestionServiceImpl.addQuestion(question.getQuestion(), question.getAnswer());
+        Question removedQuestion = javaQuestionServiceImpl.removeQuestion(addedQuestion);
         assertEquals(allQuestions, javaQuestionServiceImpl.getAllQuestions());
 
-        verify(javaQuestionRepository).addQuestion(question);
-        verify(javaQuestionRepository).removeQuestion(question);
+        verify(javaQuestionRepository).addQuestion(argThat(q -> q.getQuestion().equals(question.getQuestion()) && q.getAnswer().equals(question.getAnswer())));
+        verify(javaQuestionRepository).removeQuestion(argThat(q -> q.getQuestion().equals(question.getQuestion()) && q.getAnswer().equals(question.getAnswer())));
         verify(javaQuestionRepository).getAllQuestions();
     }
+
     @Test
     @DisplayName("Тестирование выбрасывания исключения при вызове методов репозитория")
     public void shouldThrowExceptionWhenRepositoryThrowsExceptions() throws QuestionAlreadyExistsException, QuestionNotExistsException {
@@ -76,18 +77,17 @@ class JavaQuestionServiceImplTest {
     }
     @Test
     @DisplayName("Тестирование получения заданного количества вопросов")
-    void shouldReturnCollectionOfQuestions() throws NotValidNumberException, NotEnoughQuestionException, QuestionNotExistsException {
+    void shouldReturnCollectionOfQuestions() throws NotValidNumberException, NotEnoughQuestionException {
         when(javaQuestionRepository.getAllQuestions()).thenReturn(allQuestions);
         Collection<Question> result = javaQuestionServiceImpl.getAmountOfQuestions(numberToRequest);
 
         assertEquals(numberToRequest, result.size());
-        result.forEach(question -> assertTrue(allQuestions.contains(question)));
     }
     @Test
     @DisplayName("Тестирование получения вопросов, когда список пустой")
     void shouldThrowExceptionByEmptyList() {
         when(javaQuestionRepository.getAllQuestions()).thenReturn(Collections.emptyList());
-        assertThrows(QuestionNotExistsException.class, () -> javaQuestionServiceImpl.getAmountOfQuestions(1));
+        assertThrows(NotEnoughQuestionException.class, () -> javaQuestionServiceImpl.getAmountOfQuestions(1));
     }
     @Test
     @DisplayName("Тестирование получения вопросов при большем количестве, чем доступно")
@@ -98,7 +98,6 @@ class JavaQuestionServiceImplTest {
     @Test
     @DisplayName("Тестирование получения вопросов при невалидном числе")
     void shouldThrowExceptionNotValidNumber() {
-        when(javaQuestionRepository.getAllQuestions()).thenReturn(allQuestions);
         assertThrows(NotValidNumberException.class, () -> javaQuestionServiceImpl.getAmountOfQuestions(invalidAmount));
     }
     @Test

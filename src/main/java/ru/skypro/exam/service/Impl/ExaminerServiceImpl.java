@@ -1,8 +1,9 @@
 package ru.skypro.exam.service.Impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import ru.skypro.exam.exceptions.MethodNotAllowedException;
+import ru.skypro.exam.exceptions.NotEnoughQuestionException;
 import ru.skypro.exam.exceptions.NotValidNumberException;
 import ru.skypro.exam.model.Question;
 import ru.skypro.exam.service.ExaminerService;
@@ -10,84 +11,51 @@ import ru.skypro.exam.service.QuestionService;
 import ru.skypro.exam.validation.NumberValidator;
 
 import java.util.*;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 public class ExaminerServiceImpl implements ExaminerService {
-    private final Collection<QuestionService> questionServices;
+    private final Map<Class<? extends QuestionService>, QuestionService> questionServicesMap;
+    private final int maxMathUniqueQuestions;
 
     @Autowired
-    public ExaminerServiceImpl(Collection<QuestionService> questionServices) {
-        this.questionServices = questionServices;
+    public ExaminerServiceImpl(Collection<QuestionService> questionServices,
+                               @Value("${mathQuestionService.maxUniqueQuestions}") int maxMathUniqueQuestions) {
+        this.questionServicesMap = questionServices.stream()
+                .collect(Collectors.toMap(QuestionService::getClass, Function.identity()));
+        this.maxMathUniqueQuestions = maxMathUniqueQuestions;
     }
-    private static final Class<?> JAVA_QUESTION_SERVICE_CLASS = JavaQuestionServiceImpl.class;
+
+    private <T extends QuestionService> T getQuestionServiceByClass(Class<T> serviceClass) {
+        return serviceClass.cast(Optional.ofNullable(questionServicesMap.get(serviceClass))
+                .orElseThrow(() -> new IllegalStateException(serviceClass.getSimpleName() + " не найден")));
+    }
+
     @Override
-    public List<Question> getQuestions(int amount) throws NotValidNumberException, MethodNotAllowedException {
+    public List<Question> getQuestions(int amount) throws NotValidNumberException, NotEnoughQuestionException {
         if (!NumberValidator.isPositiveNumber(amount)) {
             throw new NotValidNumberException();
         }
-        List<Question> javaQuestions = getJavaQuestions(amount);
-        List<Question> mathQuestions = getMathQuestions(amount - javaQuestions.size());
-        List<Question> questions = new ArrayList<>(javaQuestions);
-        questions.addAll(mathQuestions);
-        Collections.shuffle(questions);
-        return questions;
-    }
-    private List<Question> getJavaQuestions(int amount) throws MethodNotAllowedException {
-        List<Question> javaQuestions = new ArrayList<>();
 
-        int javaQuestionsAmount = getAllJavaQuestionsAmount();
-        int limit = Math.min(amount, javaQuestionsAmount);
+        JavaQuestionServiceImpl javaQuestionService = getQuestionServiceByClass(JavaQuestionServiceImpl.class);
+        MathQuestionServiceImpl mathQuestionService = getQuestionServiceByClass(MathQuestionServiceImpl.class);
 
-        while (javaQuestions.size() < limit) {
-            Question randomQuestion = getRandomJavaQuestion();
-            if (javaQuestions.contains(randomQuestion)) {
-                continue;
-            }
-            javaQuestions.add(randomQuestion);
+        int totalJavaQuestionsCount = javaQuestionService.getAllQuestions().size();
+        int totalQuestionsCount = totalJavaQuestionsCount + maxMathUniqueQuestions;
+
+        if (amount > totalQuestionsCount) {
+            throw new NotEnoughQuestionException();
         }
-        return javaQuestions;
-    }
-    private int getAllJavaQuestionsAmount() {
-        return questionServices.stream()
-                .filter(service -> service.getClass().equals(JAVA_QUESTION_SERVICE_CLASS))
-                .mapToInt(service -> {
-                    try {
-                        return service.getAllQuestions().size();
-                    } catch (MethodNotAllowedException e) {
-                        throw new RuntimeException(e);
-                    }
-                })
-                .sum();
-    }
-    private Question getRandomJavaQuestion() {
-        return questionServices.stream()
-                .filter(service -> service.getClass().equals(JAVA_QUESTION_SERVICE_CLASS))
-                .findAny()
-                .orElseThrow(() -> new IllegalStateException("JavaQuestionServiceImpl не найден"))
-                .getRandomQuestion();
-    }
-    private List<Question> getMathQuestions(int amount) {
-        List<Question> mathQuestions = new ArrayList<>();
 
-        for (int i = 0; i < amount; i++) {
-            mathQuestions.add(getRandomMathQuestion());
-        }
-        return mathQuestions;
-    }
-    private Question getRandomMathQuestion() {
+        int maxJavaQuestionsCount = Math.min(amount, totalJavaQuestionsCount);
         Random random = new Random();
-        int firstNumber = random.nextInt(10);
-        int secondNumber = random.nextInt(10);
-        String question = firstNumber + " + " + secondNumber;
-        String answer = Integer.toString(firstNumber + secondNumber);
-        return new Question(question, answer);
-    }
-    @Override
-    public Collection<Question> getAllQuestions() throws MethodNotAllowedException {
-        List<Question> allQuestions = new ArrayList<>();
-        for (QuestionService questionService : questionServices) {
-            allQuestions.addAll(questionService.getAllQuestions());
-        }
-        return allQuestions;
+        int javaQuestionsCount = random.nextInt(maxJavaQuestionsCount + 1);
+        int mathQuestionsCount = amount - javaQuestionsCount;
+
+        return Stream.concat(javaQuestionService.getAmountOfQuestions(javaQuestionsCount).stream(), mathQuestionService.getAmountOfQuestions(mathQuestionsCount).stream())
+                .collect(Collectors.toList());
     }
 }
+

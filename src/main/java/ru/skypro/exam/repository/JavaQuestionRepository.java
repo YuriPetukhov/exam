@@ -7,7 +7,7 @@ import ru.skypro.exam.model.Question;
 
 import java.util.*;
 
-@Repository("javaQuestionRepository")
+@Repository
 public class JavaQuestionRepository implements QuestionRepository{
 
     private final Map<String, Question> questions;
@@ -41,15 +41,14 @@ public class JavaQuestionRepository implements QuestionRepository{
         String questionId = question.getId();
 
         if (questions.containsKey(questionId)) {
-            Question removedQuestion = questions.remove(questionId);
-            return removedQuestion;
+            return questions.remove(questionId);
         } else {
             throw new QuestionNotExistsException();
         }
     }
 
     @Override
-    public Collection<Question> getAllQuestions() {
-        return questions.values();
+    public List<Question> getAllQuestions() {
+        return new ArrayList<>(questions.values());
     }
 }
