@@ -40,6 +40,7 @@ class ExamApplicationTests {
 
 					System.out.println(comment);
 					System.out.println(responseBody);
+					System.out.println("==============================================================");
 				}
 			}
 		}

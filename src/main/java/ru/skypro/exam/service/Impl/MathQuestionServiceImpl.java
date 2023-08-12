@@ -49,16 +49,16 @@ public class MathQuestionServiceImpl implements QuestionService {
     }
 
     @Override
-    public Collection<Question> getAmountOfQuestions(int amount) throws QuestionNotExistsException, NotValidNumberException, NotEnoughQuestionException {
+    public Collection<Question> getAmountOfQuestions(int amount) throws NotValidNumberException, NotEnoughQuestionException {
         List<Question> questionList = new ArrayList<>(getAllQuestions());
 
-        if (questionList.isEmpty()) {
-            throw new QuestionNotExistsException();
+        if (amount == 0) {
+            return new ArrayList<>();
         }
-        if (!NumberValidator.isValidNumber(amount)) {
+        if (!NumberValidator.isPositiveNumber(amount)) {
             throw new NotValidNumberException();
         }
-        if (amount > questionList.size()) {
+        if (amount > getAllQuestions().size()) {
             throw new NotEnoughQuestionException();
         }
         Collections.shuffle(questionList);

@@ -28,7 +28,7 @@ public class ExaminerServiceImpl implements ExaminerService {
 
     @Override
     public List<Question> getQuestions(int amount) throws NotEnoughQuestionException, NotValidNumberException {
-        if (!NumberValidator.isValidNumber(amount)) {
+        if (!NumberValidator.isPositiveNumber(amount)) {
             throw new NotValidNumberException();
         }
         Set<Question> questions = Stream.concat(
