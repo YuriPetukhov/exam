@@ -60,23 +60,27 @@ public class JavaQuestionServiceImpl implements QuestionService {
         return new Question(randomEntry.getKey(), randomEntry.getValue());
     }
     @Override
-    public Collection<Question> getAmountOfJavaQuestions(int amount) throws QuestionNotExistsException, NotValidNumberException, NotEnoughQuestionException {
+    public Collection<Question> getAmountOfJavaQuestions(int amount) throws NotValidNumberException, NotEnoughQuestionException {
         if (questions.isEmpty()) {
-            throw new QuestionNotExistsException();
+            return new ArrayList<>();
         }
-        if (!NumberValidator.isValidNumber(amount)) {
+        if (!NumberValidator.isPositiveNumber(amount)) {
             throw new NotValidNumberException();
         }
-        if (amount > questions.size()) {
+
+        List<Question> javaQuestions = new ArrayList<>(getAllJavaQuestions());
+
+        if (amount > javaQuestions.size()) {
             throw new NotEnoughQuestionException();
         }
-        List<Question> questionList = questions.entrySet().stream()
-                .map(entry -> new Question(entry.getKey(), entry.getValue()))
-                .collect(Collectors.toList());
-        Collections.shuffle(questionList);
-        return questionList.subList(0, Math.min(amount, questionList.size()));
-    }
+        Set<Question> selectedQuestions = new HashSet<>();
 
+        while (selectedQuestions.size() < amount) {
+            Question randomQuestion = getRandomJavaQuestion();
+            selectedQuestions.add(randomQuestion);
+        }
+        return selectedQuestions;
+    }
     @Override
     public Collection<Question> getAllJavaQuestions() {
         return questions.entrySet().stream()

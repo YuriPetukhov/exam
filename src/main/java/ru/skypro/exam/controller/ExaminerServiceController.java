@@ -1,9 +1,6 @@
 package ru.skypro.exam.controller;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import ru.skypro.exam.exceptions.NotEnoughQuestionException;
 import ru.skypro.exam.exceptions.NotValidNumberException;
 import ru.skypro.exam.exceptions.QuestionNotExistsException;
@@ -20,8 +17,8 @@ public class ExaminerServiceController {
         this.examinerService = examinerService;
     }
 
-    @GetMapping("/questions")
-    public Collection<Question> getQuestions(@RequestParam int amount) throws NotValidNumberException, NotEnoughQuestionException, QuestionNotExistsException {
+    @GetMapping("get/{amount}")
+    public Collection<Question> getQuestions(@PathVariable int amount) throws NotValidNumberException, NotEnoughQuestionException, QuestionNotExistsException {
         return examinerService.getQuestions(amount);
     }
 }

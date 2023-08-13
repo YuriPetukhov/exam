@@ -1,25 +1,50 @@
-http://localhost:8080/exam/java/add?question=question1j&answer=answer1
-http://localhost:8080/exam/java/add?question=question2j&answer=answer2
-http://localhost:8080/exam/java/add?question=question3j&answer=answer3
-http://localhost:8080/exam/java/add?question=question4j&answer=answer4
-http://localhost:8080/exam/java/add?question=question5j&answer=answer5
-http://localhost:8080/exam/java/add?question=question1j&answer=answer6
+# 1. Добавляем первый вопрос по Джаве
+http://localhost:8080/exam/java/add?question=question1j&answer=answer1j
+# 2. Добавляем второй вопрос по Джаве
+http://localhost:8080/exam/java/add?question=question2j&answer=answer2j
+# 3. Добавляем третий вопрос по Джаве
+http://localhost:8080/exam/java/add?question=question3j&answer=answer3j
+# 4. Добавляем четвертый вопрос по Джаве
+http://localhost:8080/exam/java/add?question=question4j&answer=answer4j
+# 5. Добавляем пятый вопрос по Джаве
+http://localhost:8080/exam/java/add?question=question5j&answer=answer5j
+# 6. Пытаемся дублировать первый вопрос по Джаве
+http://localhost:8080/exam/java/add?question=question1j&answer=answer6j
+# 7. Получаем все вопросы по Джаве
 http://localhost:8080/exam/java/getAll
-http://localhost:8080/exam/java/get/amount?amount=4
-http://localhost:8080/exam/java/get/amount?amount=0
-http://localhost:8080/exam/java/get/amount?amount=-2
-http://localhost:8080/exam/java/get/amount?amount=10
-http://localhost:8080/exam/java/remove?question=question1j&answer=answer1
-http://localhost:8080/exam/java/remove?question=question1j&answer=answer1
+# 8. Получаем четыре вопроса по Джаве
+http://localhost:8080/exam/java/get/4
+# 9. Пытаемся получить ноль вопросов по Джаве
+http://localhost:8080/exam/java/get/0
+# 10. Пытаемся получить минус два вопроса по Джаве: невалидное число
+http://localhost:8080/exam/java/get/-2
+# 11. Пытаемся получить десять вопросов по Джаве: больше, чем есть
+http://localhost:8080/exam/java/get/10
+# 12. Удаляем первый вопрос по Джаве
+http://localhost:8080/exam/java/remove?question=question1j&answer=answer1j
+# 13. Пытаемся удалить первый вопрос по Джаве: вопрос уже удален
+http://localhost:8080/exam/java/remove?question=question1j
+# 14. Получаем все вопросы по Джаве: без первого вопроса
 http://localhost:8080/exam/java/getAll
+# 15. Получаем случайный вопрос по Джаве
 http://localhost:8080/exam/java/random
+# 16. Получаем случайный вопрос по Джаве: для сравнения, что вопрос другой
 http://localhost:8080/exam/java/random
+# 17. Получаем случайный вопрос по Джаве: для сравнения, что вопрос другой
 http://localhost:8080/exam/java/random
+# 18. Находим второй вопрос по Джаве
 http://localhost:8080/exam/java/find?question=question2j
+# 19. Пытаемся найти удаленный первый вопрос по Джаве
 http://localhost:8080/exam/java/find?question=question1j
-http://localhost:8080/exam/questions?amount=4
-http://localhost:8080/exam/questions?amount=4
-http://localhost:8080/exam/questions?amount=4
-http://localhost:8080/exam/questions?amount=0
-http://localhost:8080/exam/questions?amount=-2
-http://localhost:8080/exam/questions?amount=10
+# 20. Получаем четыре вопроса
+http://localhost:8080/exam/get/4
+# 21. Получаем четыре вопроса: для сравнения, что вопросы другие
+http://localhost:8080/exam/get/4
+# 22. Получаем четыре вопроса: для сравнения, что вопросы другие
+http://localhost:8080/exam/get/4
+# 23. Пытаемся получить ноль вопросов
+http://localhost:8080/exam/get/0
+# 24. Пытаемся получить минус два вопроса: невалидное число
+http://localhost:8080/exam/get/-2
+# 25. Пытаемся получить десять вопросов: число больше вопросов
+http://localhost:8080/exam/get/10

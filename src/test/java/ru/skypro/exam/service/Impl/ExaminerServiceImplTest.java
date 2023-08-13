@@ -21,14 +21,14 @@ import static org.mockito.Mockito.when;
 public class ExaminerServiceImplTest {
 
     @Mock
-    private QuestionService javaQuestionService;
+    private QuestionService questionService;
 
     @InjectMocks
     private ExaminerServiceImpl examinerService;
 
     @Test
-    @DisplayName("Тестирование получения вопросов - успешный случай")
-    public void getQuestionsSuccessfulTest() throws NotValidNumberException, NotEnoughQuestionException, QuestionNotExistsException {
+    @DisplayName("Тест получения вопросов - успешный случай")
+    public void shouldGetQuestions() throws NotValidNumberException, NotEnoughQuestionException, QuestionNotExistsException {
         int amount = 5;
 
         Collection<Question> allJavaQuestions = new ArrayList<>(Arrays.asList(
@@ -39,16 +39,7 @@ public class ExaminerServiceImplTest {
                 new Question("Question 5", "Answer 5")
         ));
 
-        when(javaQuestionService.getAllJavaQuestions()).thenReturn(allJavaQuestions);
-
-        List<Question> randomQuestions = Arrays.asList(
-                new Question("Question 1", "Answer 1"),
-                new Question("Question 2", "Answer 2"),
-                new Question("Question 3", "Answer 3"),
-                new Question("Question 4", "Answer 4"),
-                new Question("Question 5", "Answer 5")
-        );
-        when(javaQuestionService.getRandomJavaQuestion()).thenReturn(randomQuestions.get(0), randomQuestions.get(1), randomQuestions.get(2), randomQuestions.get(3), randomQuestions.get(4));
+        when(questionService.getAmountOfJavaQuestions(amount)).thenReturn(allJavaQuestions);
 
         Collection<Question> selectedQuestions = examinerService.getQuestions(amount);
 
@@ -56,40 +47,27 @@ public class ExaminerServiceImplTest {
     }
 
     @Test
-    @DisplayName("Тестирование получения вопросов при большем количестве, чем доступно")
-    public void getQuestionsNotEnoughQuestionsAvailableTest() {
+    @DisplayName("Тест получения вопросов при большем количестве, чем доступно")
+    public void shouldThrowExceptionWhenGettingToManyQuestions() throws NotValidNumberException, NotEnoughQuestionException, QuestionNotExistsException {
         int amount = 10;
 
-        List<Question> javaQuestions = Arrays.asList(
-                new Question("Question 1", "Answer 1"),
-                new Question("Question 2", "Answer 2"),
-                new Question("Question 3", "Answer 3")
-        );
-        when(javaQuestionService.getAllJavaQuestions()).thenReturn(javaQuestions);
-
-
-        assertThrows(NotEnoughQuestionException.class, () -> {
-            examinerService.getQuestions(amount);
+        when(questionService.getAmountOfJavaQuestions(amount)).thenThrow(NotEnoughQuestionException.class);
+        assertThrows(NotEnoughQuestionException.class, () -> {examinerService.getQuestions(amount);
         });
     }
 
     @Test
-    @DisplayName("Тестирование получения вопросов, когда нет доступных вопросов")
-    public void testGetQuestions_NoQuestions() {
+    @DisplayName("Тест получения вопросов, когда нет доступных вопросов")
+    public void shouldThrowExceptionWhenNotAvailableQuestions() throws NotValidNumberException, NotEnoughQuestionException, QuestionNotExistsException {
+        int amount = 15;
 
-        int amount = 5;
-
-        List<Question> javaQuestions = Collections.emptyList();
-        when(javaQuestionService.getAllJavaQuestions()).thenReturn(javaQuestions);
-
-        assertThrows(NotEnoughQuestionException.class, () -> {
-            examinerService.getQuestions(amount);
-        });
+        when(questionService.getAmountOfJavaQuestions(amount)).thenThrow(NotEnoughQuestionException.class);
+        assertThrows(NotEnoughQuestionException.class, () -> examinerService.getQuestions(amount));
     }
 
     @Test
-    @DisplayName("Тестирование получения вопросов при невалидном числе")
-    public void getQuestionsNotValidNumberTest() {
+    @DisplayName("Тест получения вопросов при невалидном числе")
+    public void shouldThrowExceptionWhenGettingAmountOfJavaQuestionsByNotValidNumber() {
         int amount = -2;
         assertThrows(NotValidNumberException.class, () -> {
             examinerService.getQuestions(amount);
