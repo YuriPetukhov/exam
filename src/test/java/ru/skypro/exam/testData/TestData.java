@@ -4,6 +4,7 @@ import com.github.javafaker.Faker;
 import org.springframework.stereotype.Component;
 import ru.skypro.exam.model.Question;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -62,6 +63,13 @@ public class TestData {
         Faker faker = new Faker();
         String questionText = "Не существующий вопрос: " + faker.internet().uuid();
         return new Question(questionText, null);
+    }
+    public static List<Question> generateRandomTestData(int questionsNumber){
+        List<Question> allQuestions = new ArrayList<>();
+        for (int i = 0; i < questionsNumber; i++) {
+            allQuestions.add(TestData.randomTestData());
+        }
+        return allQuestions;
     }
 }
 

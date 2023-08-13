@@ -25,7 +25,6 @@ public class ExaminerServiceImplTest {
     private JavaQuestionServiceImpl javaQuestionService;
     @Mock
     private MathQuestionServiceImpl mathQuestionService;
-
     private ExaminerServiceImpl examinerService;
 
     @BeforeEach
@@ -35,9 +34,8 @@ public class ExaminerServiceImplTest {
         questionServices.add(mathQuestionService);
         examinerService = new ExaminerServiceImpl(questionServices, 100);
     }
-
     @Test
-    @DisplayName("Тестирование успешного получения вопросов")
+    @DisplayName("Тест успешного получения вопросов")
     public void shouldGetQuestionsWhenEnoughQuestionsAvailable() throws NotEnoughQuestionException, NotValidNumberException {
         int amountOfQuestions = 6;
 
@@ -53,7 +51,7 @@ public class ExaminerServiceImplTest {
         verify(mathQuestionService, atLeastOnce()).getAmountOfQuestions(anyInt());
     }
     @Test
-    @DisplayName("Тестирование выброса исключения NotValidNumberException")
+    @DisplayName("Тест выброса исключения NotValidNumberException")
     public void shouldThrowNotValidNumberExceptionWhenInvalidNumber() {
         int invalidAmount = -1;
 
@@ -61,7 +59,7 @@ public class ExaminerServiceImplTest {
                 () -> examinerService.getQuestions(invalidAmount));
     }
     @Test
-    @DisplayName("Тестирование выброса исключения NotEnoughQuestionException")
+    @DisplayName("Тест выброса исключения NotEnoughQuestionException")
     public void shouldThrowNotEnoughQuestionExceptionWhenNotEnoughQuestions() {
         int tooManyQuestions = 101;
         registerServices(examinerService, javaQuestionService, mathQuestionService);

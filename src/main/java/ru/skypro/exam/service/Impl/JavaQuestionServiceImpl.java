@@ -58,16 +58,17 @@ public class JavaQuestionServiceImpl implements QuestionService {
         if (!NumberValidator.isPositiveNumber(amount)) {
             throw new NotValidNumberException();
         }
-        if (amount > getAllQuestions().size()) {
+        List<Question> allQuestionsCopy = new ArrayList<>(getAllQuestions());
+        if (amount > allQuestionsCopy.size()) {
             throw new NotEnoughQuestionException();
         }
         List<Question> selectedQuestions = new ArrayList<>();
         Random random = new Random();
 
         for (int i = 0; i < amount; i++) {
-            int randomIndex = random.nextInt(getAllQuestions().size());
-            selectedQuestions.add(getAllQuestions().get(randomIndex));
-            getAllQuestions().remove(randomIndex);
+            int randomIndex = random.nextInt(allQuestionsCopy.size());
+            selectedQuestions.add(allQuestionsCopy.get(randomIndex));
+            allQuestionsCopy.remove(randomIndex);
         }
 
         return selectedQuestions;

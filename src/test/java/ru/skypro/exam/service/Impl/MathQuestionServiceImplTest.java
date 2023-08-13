@@ -1,5 +1,6 @@
 package ru.skypro.exam.service.Impl;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -11,44 +12,49 @@ import ru.skypro.exam.exceptions.NotValidNumberException;
 import ru.skypro.exam.model.Question;
 import ru.skypro.exam.testData.TestData;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class MathQuestionServiceImplTest {
-
     @InjectMocks
     MathQuestionServiceImpl mathQuestionService;
+
     private final int numberToRequest = 6;
     private final int invalidAmount = -1;
     private final int totalAttempts = 100;
-
-    @Test
-    @DisplayName("Тестирование вызова методов репозитория при добавлении, удалении, поиске, запросе количества и получении всех вопросов")
-    void shouldCallRepositoryMethodsAndThrowMethodNotAllowedException() throws MethodNotAllowedException {
-        MathQuestionServiceImpl mathQuestionService = Mockito.spy(new MathQuestionServiceImpl());
-        Question question = TestData.randomTestData();
-
-        doThrow(MethodNotAllowedException.class).when(mathQuestionService).addQuestion(question.getQuestion(), question.getAnswer());
-        assertThrows(MethodNotAllowedException.class, () -> mathQuestionService.addQuestion(question.getQuestion(), question.getAnswer()));
-        verify(mathQuestionService, times(1)).addQuestion(question.getQuestion(), question.getAnswer());
-
-        doThrow(MethodNotAllowedException.class).when(mathQuestionService).removeQuestion(any());
-        assertThrows(MethodNotAllowedException.class, () -> mathQuestionService.removeQuestion(question));
-        verify(mathQuestionService, times(1)).removeQuestion(question);
-
-        doThrow(MethodNotAllowedException.class).when(mathQuestionService).findQuestion(question.getQuestion());
-        assertThrows(MethodNotAllowedException.class, () -> mathQuestionService.findQuestion(question.getQuestion()));
-        verify(mathQuestionService, times(1)).findQuestion(question.getQuestion());
-
-        doThrow(MethodNotAllowedException.class).when(mathQuestionService).getAllQuestions();
-        assertThrows(MethodNotAllowedException.class, mathQuestionService::getAllQuestions);
-        verify(mathQuestionService, times(1)).getAllQuestions();
+    private MathQuestionServiceImpl mathQuestionServiceMock;
+    @BeforeEach
+    void setUp() {
+        mathQuestionServiceMock = spy(mathQuestionService);
     }
     @Test
-    @DisplayName("Тестирование вызова и генерации случайных математических вопросов")
+    @DisplayName("Тест вызова методов репозитория при добавлении, удалении, поиске, запросе количества и получении всех вопросов")
+    void shouldThrowExceptionWhenQuestionAlreadyExists() throws MethodNotAllowedException {
+        Question question = TestData.randomTestData();
+
+        doThrow(MethodNotAllowedException.class).when(mathQuestionServiceMock).addQuestion(question.getQuestion(), question.getAnswer());
+        assertThrows(MethodNotAllowedException.class, () -> mathQuestionServiceMock.addQuestion(question.getQuestion(), question.getAnswer()));
+        verify(mathQuestionServiceMock, times(1)).addQuestion(question.getQuestion(), question.getAnswer());
+
+        doThrow(MethodNotAllowedException.class).when(mathQuestionServiceMock).removeQuestion(any());
+        assertThrows(MethodNotAllowedException.class, () -> mathQuestionServiceMock.removeQuestion(question));
+        verify(mathQuestionServiceMock, times(1)).removeQuestion(question);
+
+        doThrow(MethodNotAllowedException.class).when(mathQuestionServiceMock).findQuestion(question.getQuestion());
+        assertThrows(MethodNotAllowedException.class, () -> mathQuestionServiceMock.findQuestion(question.getQuestion()));
+        verify(mathQuestionServiceMock, times(1)).findQuestion(question.getQuestion());
+
+        doThrow(MethodNotAllowedException.class).when(mathQuestionServiceMock).getAllQuestions();
+        assertThrows(MethodNotAllowedException.class, mathQuestionServiceMock::getAllQuestions);
+        verify(mathQuestionServiceMock, times(1)).getAllQuestions();
+    }
+    @Test
+    @DisplayName("Тест вызова и генерации случайных математических вопросов")
     void shouldGenerateRandomMathQuestions() {
         Set<Question> uniqueQuestions = new HashSet<>();
 
@@ -59,19 +65,17 @@ class MathQuestionServiceImplTest {
             assertNotNull(randomQuestion.getAnswer());
             uniqueQuestions.add(randomQuestion);
         }
-
         assertTrue(uniqueQuestions.size() > 1, "Сгенерированные вопросы должны отличаться");
     }
     @Test
-    @DisplayName("Тестирование получения заданного количества вопросов")
+    @DisplayName("Тест получения заданного количества вопросов")
     void shouldReturnCollectionOfQuestions() throws NotValidNumberException {
         Collection<Question> result = mathQuestionService.getAmountOfQuestions(numberToRequest);
         assertEquals(numberToRequest, result.size());
     }
     @Test
-    @DisplayName("Тестирование получения вопросов при невалидном числе")
+    @DisplayName("Тест получения вопросов при невалидном числе")
     void shouldThrowExceptionNotValidNumber() {
         assertThrows(NotValidNumberException.class, () -> mathQuestionService.getAmountOfQuestions(invalidAmount));
     }
-
 }

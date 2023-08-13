@@ -19,7 +19,6 @@ import static org.junit.jupiter.api.Assertions.*;
 class JavaQuestionRepositoryTest {
     private Set<Question> questions;
     private JavaQuestionRepository repository;
-
     @BeforeEach
     public void setUp() {
         Comparator<Question> questionComparator = Comparator.comparing(Question::getQuestion);
@@ -40,7 +39,7 @@ class JavaQuestionRepositoryTest {
         }
     }
     @Test
-    @DisplayName("Тестирование добавления нового вопроса в пустую коллекцию")
+    @DisplayName("Тест добавления нового вопроса в пустую коллекцию")
     public void shouldAddNewQuestionToEmptyCollection() throws QuestionAlreadyExistsException {
         JavaQuestionRepository emptyRepository = new JavaQuestionRepository();
         Question newQuestion = TestData.randomTestData();
@@ -50,14 +49,14 @@ class JavaQuestionRepositoryTest {
     }
 
     @Test
-    @DisplayName("Тестирование дублирования вопроса")
+    @DisplayName("Тест дублирования вопроса")
     public void shouldThrowQuestionAlreadyExistsException() {
         Question existingQuestion = questions.iterator().next();
         assertThrows(QuestionAlreadyExistsException.class, () -> repository.addQuestion(existingQuestion));
     }
 
     @Test
-    @DisplayName("Тестирование удаления вопроса")
+    @DisplayName("Тест удаления вопроса")
     public void shouldRemoveQuestion() throws QuestionNotExistsException {
         Question sampleQuestion = questions.iterator().next();
         Question removedQuestion = repository.removeQuestion(sampleQuestion);
@@ -65,14 +64,14 @@ class JavaQuestionRepositoryTest {
     }
 
     @Test
-    @DisplayName("Тестирование удаления несуществующего вопроса")
+    @DisplayName("Тест удаления несуществующего вопроса")
     public void shouldThrowQuestionNotExistsException() {
         Question nonExistingQuestion = TestData.randomNonExistingQuestion();
         assertThrows(QuestionNotExistsException.class, () -> repository.removeQuestion(nonExistingQuestion));
     }
 
     @Test
-    @DisplayName("Тестирование получения всех вопросов")
+    @DisplayName("Тест получения всех вопросов")
     public void shouldGetAllQuestions() {
         Collection<Question> allQuestions = repository.getAllQuestions();
         assertEquals(questions.size(), allQuestions.size());
