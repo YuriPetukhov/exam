@@ -24,10 +24,8 @@ public class ExaminerServiceImplTest {
 
     @Mock
     private QuestionService javaQuestionService;
-
     @Mock
     private QuestionService mathQuestionService;
-
     @InjectMocks
     private ExaminerServiceImpl examinerService;
     @BeforeEach
@@ -36,7 +34,7 @@ public class ExaminerServiceImplTest {
     }
 
     @Test
-    @DisplayName("Тестирование успешного получения вопросов")
+    @DisplayName("Тест успешного получения вопросов")
     public void shouldGetQuestionsWhenEnoughQuestionsAvailable() throws NotValidNumberException, NotEnoughQuestionException {
         int amount = 6;
         when(javaQuestionService.getAllQuestions()).thenReturn(JAVA_LIST);
@@ -52,9 +50,8 @@ public class ExaminerServiceImplTest {
         Set<Question> allQuestions = Stream.concat(JAVA_LIST.stream(), MATH_LIST.stream()).collect(Collectors.toSet());
         resultQuestions.forEach(question -> assertTrue(allQuestions.contains(question)));
     }
-
     @Test
-    @DisplayName("Тестирование получения вопросов при большем количестве, чем доступно")
+    @DisplayName("Тест получения вопросов при большем количестве, чем доступно")
     public void shouldThrowExceptionNotEnoughQuestionsAvailable() {
         int amount = 16;
         when(javaQuestionService.getAllQuestions()).thenReturn(JAVA_LIST);
@@ -68,7 +65,7 @@ public class ExaminerServiceImplTest {
     }
 
     @Test
-    @DisplayName("Тестирование получения вопросов, когда нет доступных вопросов")
+    @DisplayName("Тест получения вопросов, когда нет доступных вопросов")
     public void shouldThrowExceptionByEmptyList() {
         int amount = 5;
 
@@ -78,7 +75,7 @@ public class ExaminerServiceImplTest {
     }
 
     @Test
-    @DisplayName("Тестирование получения вопросов при невалидном числе")
+    @DisplayName("Тест получения вопросов при невалидном числе")
     public void shouldThrowExceptionNotValidNumber() {
         int amount = -2;
         assertThrows(NotValidNumberException.class, () -> {
