@@ -38,9 +38,9 @@ http://localhost:8080/exam/java/find?question=question2j
 http://localhost:8080/exam/java/find?question=question1j
 # 20. Получаем четыре вопроса по Джаве
 http://localhost:8080/exam/questions?amount=4
-# 21. Получаем четыре вопроса по Джаве: для сравнения, что вопросы другие, вопросы по математике генерируются на лету
+# 21. Получаем четыре вопроса по Джаве: для сравнения, что вопросы другие
 http://localhost:8080/exam/questions?amount=4
-# 22. Получаем четыре вопроса по Джаве: для сравнения, что вопросы другие, вопросы по математике генерируются на лету
+# 22. Получаем четыре вопроса по Джаве: для сравнения, что вопросы другие
 http://localhost:8080/exam/questions?amount=4
 # 23. Пытаемся получить ноль вопросов по Джаве
 http://localhost:8080/exam/questions?amount=0
@@ -54,7 +54,7 @@ http://localhost:8080/exam/math/add?question=question1m&answer=answer1m
 http://localhost:8080/exam/math/add?question=question2m&answer=answer2m
 # 28. Получаем все вопросы по математике
 http://localhost:8080/exam/math/getAll
-# 29. Получаем три вопроса по математике
+# 29. Пытаемся получить три вопроса по математике
 http://localhost:8080/exam/math/get/amount?amount=3
 # 30. Пытаемся получить ноль вопроса по математике: невалидное число
 http://localhost:8080/exam/math/get/amount?amount=0

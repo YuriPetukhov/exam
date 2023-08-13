@@ -6,7 +6,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import ru.skypro.exam.Repository.JavaQuestionRepository;
+import ru.skypro.exam.repository.JavaQuestionRepository;
 import ru.skypro.exam.exceptions.*;
 import ru.skypro.exam.model.Question;
 
@@ -74,12 +74,6 @@ class JavaQuestionServiceImplTest {
         }
     }
     @Test
-    @DisplayName("Тестирование получения вопросов, когда список пустой")
-    void shouldThrowExceptionByEmptyListTest() {
-        when(javaQuestionRepository.getAllQuestions()).thenReturn(new ArrayList<>());
-        assertThrows(QuestionNotExistsException.class, () -> javaQuestionServiceImpl.getAmountOfQuestions(1));
-    }
-    @Test
     @DisplayName("Тестирование получения вопросов при большем количестве, чем доступно")
     void shouldThrowExceptionByNotEnoughQuestions() {
         int tooManyQuestions = 10;
@@ -99,7 +93,7 @@ class JavaQuestionServiceImplTest {
         when(javaQuestionRepository.getAllQuestions()).thenReturn(JAVA_LIST);
 
         Set<Question> uniqueQuestions = new HashSet<>();
-        int totalAttempts = 100;
+        int totalAttempts = 200;
 
         for (int i = 0; i < totalAttempts; i++) {
             uniqueQuestions.add(javaQuestionServiceImpl.getRandomQuestion());

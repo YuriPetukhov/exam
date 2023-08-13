@@ -1,7 +1,7 @@
 package ru.skypro.exam.service.Impl;
 
 import org.springframework.stereotype.Service;
-import ru.skypro.exam.Repository.MathQuestionRepository;
+import ru.skypro.exam.repository.MathQuestionRepository;
 import ru.skypro.exam.exceptions.*;
 import ru.skypro.exam.model.Question;
 import ru.skypro.exam.service.QuestionService;

@@ -1,4 +1,4 @@
-package ru.skypro.exam.Repository;
+package ru.skypro.exam.repository;
 
 import org.springframework.stereotype.Repository;
 import ru.skypro.exam.exceptions.QuestionAlreadyExistsException;
@@ -15,12 +15,12 @@ public class JavaQuestionRepository implements QuestionRepository{
         this.questions = new HashMap<>();
     }
     @Override
-    public Question addQuestion(String question, String answer) throws QuestionAlreadyExistsException {
-        if (questions.containsKey(question)) {
+    public Question addQuestion(String questionText, String answer) throws QuestionAlreadyExistsException {
+        if (questions.containsKey(questionText)) {
             throw new QuestionAlreadyExistsException();
         }
-        questions.put(question, answer);
-        return new Question(question, answer);
+        questions.put(questionText, answer);
+        return new Question(questionText, answer);
     }
     @Override
     public Question addQuestion(Question question) throws QuestionAlreadyExistsException {
@@ -33,34 +33,19 @@ public class JavaQuestionRepository implements QuestionRepository{
 
     @Override
     public Question removeQuestion(Question question) throws QuestionNotExistsException {
-        Question foundQuestion = findQuestion(question.getQuestion());
-        if (foundQuestion == null) {
+        Optional<Question> foundQuestion = getAllQuestions().stream()
+                .filter(q -> q.getQuestion().equals(question.getQuestion()))
+                .findFirst();
+        if (foundQuestion.isEmpty()) {
             throw new QuestionNotExistsException();
         }
         questions.remove(question.getQuestion());
-        return foundQuestion;
-    }
-    @Override
-    public Question findQuestion(String question) {
-        if (questions.containsKey(question)) {
-            String answer = questions.get(question);
-            return new Question(question, answer);
-        } else {
-            return null;
-        }
+        return foundQuestion.get();
     }
     @Override
     public Collection<Question> getAllQuestions() {
         return questions.entrySet().stream()
                 .map(entry -> new Question(entry.getKey(), entry.getValue()))
                 .collect(Collectors.toList());
-    }
-    @Override
-    public Question getRandomQuestion() {
-        Collection<Question> allQuestions = getAllQuestions();
-        return allQuestions.stream()
-                .skip(new Random().nextInt(allQuestions.size()))
-                .findFirst()
-                .orElse(null);
     }
 }

@@ -6,7 +6,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import ru.skypro.exam.Repository.MathQuestionRepository;
+import ru.skypro.exam.repository.MathQuestionRepository;
 import ru.skypro.exam.exceptions.*;
 import ru.skypro.exam.model.Question;
 
@@ -77,7 +77,7 @@ class MathQuestionServiceImplTest {
     @DisplayName("Тестирование получения вопросов, когда список пустой")
     void shouldThrowExceptionByEmptyListTest() {
         when(mathQuestionRepository.getAllQuestions()).thenReturn(new ArrayList<>());
-        assertThrows(QuestionNotExistsException.class, () -> mathQuestionServiceImpl.getAmountOfQuestions(1));
+        assertThrows(NotEnoughQuestionException.class, () -> mathQuestionServiceImpl.getAmountOfQuestions(1));
     }
     @Test
     @DisplayName("Тестирование получения вопросов при большем количестве, чем доступно")

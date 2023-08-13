@@ -59,16 +59,4 @@ public class QuestionsConstants {
             MATH4,
             MATH5
     );
-    public static final List<Question> JAVA_MATH_LIST = List.of(
-            JAVA1,
-            JAVA2,
-            JAVA3,
-            JAVA4,
-            JAVA5,
-            MATH1,
-            MATH2,
-            MATH3,
-            MATH4,
-            MATH5
-    );
 }
