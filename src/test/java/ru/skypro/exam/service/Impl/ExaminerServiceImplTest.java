@@ -64,13 +64,4 @@ public class ExaminerServiceImplTest {
         when(questionService.getAmountOfJavaQuestions(amount)).thenThrow(NotEnoughQuestionException.class);
         assertThrows(NotEnoughQuestionException.class, () -> examinerService.getQuestions(amount));
     }
-
-    @Test
-    @DisplayName("Тест получения вопросов при невалидном числе")
-    public void shouldThrowExceptionWhenGettingAmountOfJavaQuestionsByNotValidNumber() {
-        int amount = -2;
-        assertThrows(NotValidNumberException.class, () -> {
-            examinerService.getQuestions(amount);
-        });
-    }
 }

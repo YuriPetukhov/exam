@@ -22,9 +22,6 @@ public class ExaminerServiceImpl implements ExaminerService {
 
     @Override
     public Collection<Question> getQuestions(int amount) throws NotValidNumberException, NotEnoughQuestionException, QuestionNotExistsException {
-        if (!NumberValidator.isPositiveNumber(amount)) {
-            throw new NotValidNumberException();
-        }
         return questionService.getAmountOfJavaQuestions(amount);
     }
 }
