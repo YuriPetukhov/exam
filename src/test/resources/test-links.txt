@@ -13,13 +13,13 @@ http://localhost:8080/exam/java/add?question=question1j&answer=answer6j
 # 7. Получаем все вопросы по Джаве
 http://localhost:8080/exam/java/getAll
 # 8. Получаем четыре вопроса по Джаве
-http://localhost:8080/exam/java/get/amount?amount=4
+http://localhost:8080/exam/java/get/4
 # 9. Пытаемся получить ноль вопросов по Джаве
-http://localhost:8080/exam/java/get/amount?amount=0
+http://localhost:8080/exam/java/get/0
 # 10. Пытаемся получить минус два вопроса по Джаве: невалидное число
-http://localhost:8080/exam/java/get/amount?amount=-2
+http://localhost:8080/exam/java/get/-2
 # 11. Пытаемся получить десять вопросов по Джаве: больше, чем есть
-http://localhost:8080/exam/java/get/amount?amount=10
+http://localhost:8080/exam/java/get/10
 # 12. Удаляем первый вопрос по Джаве
 http://localhost:8080/exam/java/remove?question=question1j&answer=answer1j
 # 13. Пытаемся удалить первый вопрос по Джаве: вопрос уже удален
@@ -36,39 +36,33 @@ http://localhost:8080/exam/java/random
 http://localhost:8080/exam/java/find?question=question2j
 # 19. Пытаемся найти удаленный первый вопрос по Джаве
 http://localhost:8080/exam/java/find?question=question1j
-# 20. Получаем четыре вопроса по Джаве
-http://localhost:8080/exam/questions?amount=4
-# 21. Получаем четыре вопроса по Джаве: для сравнения, что вопросы другие
-http://localhost:8080/exam/questions?amount=4
-# 22. Получаем четыре вопроса по Джаве: для сравнения, что вопросы другие
-http://localhost:8080/exam/questions?amount=4
-# 23. Пытаемся получить ноль вопросов по Джаве
-http://localhost:8080/exam/questions?amount=0
-# 24. Пытаемся получить минус два вопроса по Джаве: невалидное число
-http://localhost:8080/exam/questions?amount=-2
-# 25. Пытаемся получить десять вопросов по Джаве: число больше вопросов
-http://localhost:8080/exam/questions?amount=10
-# 26. Добавляем первый вопрос по математике
+# 20. Добавляем первый вопрос по математике
 http://localhost:8080/exam/math/add?question=question1m&answer=answer1m
-# 27. Добавляем второй вопрос по математике
+# 21. Добавляем второй вопрос по математике
 http://localhost:8080/exam/math/add?question=question2m&answer=answer2m
-# 28. Получаем все вопросы по математике
+# 22. Добавляем третий вопрос по математике
+http://localhost:8080/exam/math/add?question=question3m&answer=answer3m
+# 23. Добавляем четвертый вопрос по математике
+http://localhost:8080/exam/math/add?question=question4m&answer=answer4m
+# 24. Добавляем пятый вопрос по математике
+http://localhost:8080/exam/math/add?question=question5m&answer=answer5m
+# 25. Получаем все вопросы по математике
 http://localhost:8080/exam/math/getAll
-# 29. Пытаемся получить три вопроса по математике
-http://localhost:8080/exam/math/get/amount?amount=3
-# 30. Пытаемся получить ноль вопроса по математике: невалидное число
-http://localhost:8080/exam/math/get/amount?amount=0
-# 31. Пытаемся получить минус два вопроса по математике: невалидное число
-http://localhost:8080/exam/math/get/amount?amount=-2
-# 32. Удаляем первый вопрос по математике
+# 26. Получаем три вопроса по математике
+http://localhost:8080/exam/math/get/3
+# 27. Пытаемся получить ноль вопросов по математике
+http://localhost:8080/exam/math/get/0
+# 28. Пытаемся получить минус два вопроса по математике: невалидное число
+http://localhost:8080/exam/math/get/-2
+# 29. Удаляем первый вопрос по математике
 http://localhost:8080/exam/math/remove?question=question1m&answer=answer1m
-# 33. Получаем случайны вопрос по математике
+# 30. Получаем случайны вопрос по математике
 http://localhost:8080/exam/math/random
-# 34. Получаем случайны вопрос по математике: для сравнения
+# 31. Получаем случайны вопрос по математике: для сравнения
 http://localhost:8080/exam/math/random
-# 35. Получаем случайны вопрос по математике: для сравнения
+# 32. Получаем случайны вопрос по математике: для сравнения
 http://localhost:8080/exam/math/random
-# 36. Пытаемся найти первый вопрос по математике: ранее удален
+# 33. Пытаемся найти первый вопрос по математике: ранее удален
 http://localhost:8080/exam/math/find?question=question1m
-# 37. Получаем четыре вопроса по Джаве и математике
-http://localhost:8080/exam/questions?amount=4
+# 34. Получаем шесть вопросов по Джаве и математике
+http://localhost:8080/exam/get/6

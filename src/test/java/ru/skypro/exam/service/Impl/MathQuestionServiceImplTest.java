@@ -72,9 +72,9 @@ class MathQuestionServiceImplTest {
     }
     @Test
     @DisplayName("Тест получения вопросов при пустом списке")
-    void shouldThrowExceptionWhenListIsEmpty() {
+    void shouldReturnEmptyListWhenListIsEmpty() throws NotValidNumberException, NotEnoughQuestionException {
         when(mathQuestionRepository.getAllQuestions()).thenReturn(new ArrayList<>());
-        assertThrows(NotEnoughQuestionException.class, () -> mathQuestionServiceImpl.getAmountOfQuestions(1));
+        assertTrue(mathQuestionServiceImpl.getAmountOfQuestions(1).isEmpty());
     }
     @Test
     @DisplayName("Тест получения вопросов при большем количестве, чем доступно")

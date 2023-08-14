@@ -43,9 +43,11 @@ public class JavaQuestionRepository implements QuestionRepository{
         return foundQuestion.get();
     }
     @Override
-    public Collection<Question> getAllQuestions() {
-        return questions.entrySet().stream()
-                .map(entry -> new Question(entry.getKey(), entry.getValue()))
-                .collect(Collectors.toList());
+    public List<Question> getAllQuestions() {
+        return questions.isEmpty() ?
+                Collections.emptyList() :
+                questions.entrySet().stream()
+                        .map(entry -> new Question(entry.getKey(), entry.getValue()))
+                        .collect(Collectors.toList());
     }
 }

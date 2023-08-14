@@ -4,6 +4,7 @@ import ru.skypro.exam.exceptions.*;
 import ru.skypro.exam.model.Question;
 
 import java.util.Collection;
+import java.util.List;
 
 public interface QuestionService {
     Question addQuestion(String question, String answer) throws QuestionAlreadyExistsException;
@@ -14,5 +15,5 @@ public interface QuestionService {
     Question findQuestion(String question) throws QuestionNotExistsException;
     Question getRandomQuestion();
     Collection<Question> getAmountOfQuestions(int amount) throws QuestionNotExistsException, NotValidNumberException, NotEnoughQuestionException;
-    Collection<Question> getAllQuestions();
+    List<Question> getAllQuestions();
 }
