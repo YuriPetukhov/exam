@@ -2,10 +2,7 @@ package ru.skypro.exam.controller;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import ru.skypro.exam.exceptions.*;
 import ru.skypro.exam.formatter.QuestionFormatter;
 import ru.skypro.exam.model.Question;
@@ -50,8 +47,8 @@ public class MathQuestionController {
         Question randomQuestion = questionService.getRandomQuestion();
         return randomQuestion.getQuestion() + " = " + randomQuestion.getAnswer();
     }
-    @GetMapping("/get/amount")
-    public List<String> getAmountOfMathQuestions(@RequestParam int amount) throws NotValidNumberException, NotEnoughQuestionException, QuestionNotExistsException, MethodNotAllowedException {
+    @GetMapping("/get/{amount}")
+    public List<String> getAmountOfMathQuestions(@PathVariable int amount) throws NotValidNumberException, NotEnoughQuestionException, QuestionNotExistsException, MethodNotAllowedException {
         Collection<Question> questions = questionService.getAmountOfQuestions(amount);
         List<String> formattedQuestions = new ArrayList<>();
         int questionNumber = 1;

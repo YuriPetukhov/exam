@@ -13,13 +13,13 @@ http://localhost:8080/exam/java/add?question=question1j&answer=answer6j
 # 7. Получаем все вопросы по Джаве
 http://localhost:8080/exam/java/getAll
 # 8. Получаем четыре вопроса по Джаве
-http://localhost:8080/exam/java/get/amount?amount=4
+http://localhost:8080/exam/java/get/4
 # 9. Пытаемся получить ноль вопросов по Джаве
-http://localhost:8080/exam/java/get/amount?amount=0
+http://localhost:8080/exam/java/get/0
 # 10. Пытаемся получить минус два вопроса по Джаве: невалидное число
-http://localhost:8080/exam/java/get/amount?amount=-2
+http://localhost:8080/exam/java/get/-2
 # 11. Пытаемся получить десять вопросов по Джаве: больше, чем есть
-http://localhost:8080/exam/java/get/amount?amount=10
+http://localhost:8080/exam/java/get/10
 # 12. Удаляем первый вопрос по Джаве
 http://localhost:8080/exam/java/remove?question=question1j
 # 13. Пытаемся удалить первый вопрос по Джаве: вопрос уже удален
@@ -37,17 +37,17 @@ http://localhost:8080/exam/java/find?question=question2j
 # 19. Пытаемся найти удаленный первый вопрос по Джаве
 http://localhost:8080/exam/java/find?question=question1j
 # 20. Получаем четыре вопроса по Джаве и математике
-http://localhost:8080/exam/questions?amount=4
+http://localhost:8080/exam/get/4
 # 21. Получаем четыре вопроса по Джаве и математике: для сравнения, что вопросы другие, вопросы по математике генерируются на лету
-http://localhost:8080/exam/questions?amount=4
+http://localhost:8080/exam/get/4
 # 22. Получаем четыре вопроса по Джаве и математике: для сравнения, что вопросы другие, вопросы по математике генерируются на лету
-http://localhost:8080/exam/questions?amount=4
+http://localhost:8080/exam/get/4
 # 23. Пытаемся получить ноль вопросов по Джаве и математике: невалидное число
-http://localhost:8080/exam/questions?amount=0
+http://localhost:8080/exam/get/0
 # 24. Пытаемся получить минус два вопроса по Джаве и математике: невалидное число
-http://localhost:8080/exam/questions?amount=-2
+http://localhost:8080/exam/get/-2
 # 25. Получаем десять вопросов по Джаве и математике: вопросы по математике генерируются на лету
-http://localhost:8080/exam/questions?amount=10
+http://localhost:8080/exam/get/10
 # 26. Пытаемся добавить первый вопрос по математике
 http://localhost:8080/exam/math/add?question=question1m&answer=answer1m
 # 27. Пытаемся добавить второй вопрос по математике
@@ -55,11 +55,11 @@ http://localhost:8080/exam/math/add?question=question2m&answer=answer2m
 # 28. Пытаемся получить все вопросы по математике
 http://localhost:8080/exam/math/getAll
 # 29. Получаем три случайных вопроса по математике
-http://localhost:8080/exam/math/get/amount?amount=3
+http://localhost:8080/exam/math/get/3
 # 30. Пытаемся получить ноль вопроса по математике
-http://localhost:8080/exam/math/get/amount?amount=0
+http://localhost:8080/exam/math/get/0
 # 31. Пытаемся получить минус два вопроса по математике
-http://localhost:8080/exam/math/get/amount?amount=-2
+http://localhost:8080/exam/math/get/-2
 # 32. Пытаемся удалить первый вопрос по математике
 http://localhost:8080/exam/math/remove?question=question1m
 # 33. Получаем случайный вопрос по математике
@@ -71,4 +71,4 @@ http://localhost:8080/exam/math/random
 # 36. Пытаемся найти первый вопрос по математике
 http://localhost:8080/exam/math/find?question=question1m
 # 37. Получаем четыре вопроса по Джаве и математике
-http://localhost:8080/exam/questions?amount=4
+http://localhost:8080/exam/get/4

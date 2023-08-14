@@ -41,7 +41,6 @@ public class MathQuestionServiceImpl implements QuestionService {
         return new Question(question, answer);
     }
 
-
     @Override
     public List<Question> getAmountOfQuestions(int amount) throws NotValidNumberException {
         if (amount == 0) {
