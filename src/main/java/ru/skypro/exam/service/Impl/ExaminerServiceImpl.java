@@ -7,7 +7,6 @@ import ru.skypro.exam.exceptions.QuestionNotExistsException;
 import ru.skypro.exam.model.Question;
 import ru.skypro.exam.service.ExaminerService;
 import ru.skypro.exam.service.QuestionService;
-import ru.skypro.exam.validation.NumberValidator;
 
 import java.util.*;
 

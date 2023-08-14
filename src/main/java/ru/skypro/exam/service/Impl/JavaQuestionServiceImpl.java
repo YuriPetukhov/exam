@@ -68,9 +68,7 @@ public class JavaQuestionServiceImpl implements QuestionService {
             throw new NotValidNumberException();
         }
 
-        List<Question> javaQuestions = new ArrayList<>(getAllJavaQuestions());
-
-        if (amount > javaQuestions.size()) {
+        if (amount > getAllJavaQuestions().size()) {
             throw new NotEnoughQuestionException();
         }
         Set<Question> selectedQuestions = new HashSet<>();
