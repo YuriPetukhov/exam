@@ -56,9 +56,7 @@ public class MathQuestionServiceImpl implements QuestionService {
             throw new NotValidNumberException();
         }
 
-        List<Question> javaQuestions = new ArrayList<>(getAllQuestions());
-
-        if (amount > javaQuestions.size()) {
+        if (amount > getAllQuestions().size()) {
             throw new NotEnoughQuestionException();
         }
         Set<Question> selectedQuestions = new HashSet<>();

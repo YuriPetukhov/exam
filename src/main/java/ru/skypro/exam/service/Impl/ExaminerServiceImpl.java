@@ -12,8 +12,6 @@ import ru.skypro.exam.service.QuestionService;
 import ru.skypro.exam.validation.NumberValidator;
 
 import java.util.*;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Service
 public class ExaminerServiceImpl implements ExaminerService {
