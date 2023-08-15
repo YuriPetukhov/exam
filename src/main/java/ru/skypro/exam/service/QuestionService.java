@@ -12,6 +12,6 @@ public interface QuestionService {
     Question removeQuestion(Question question) throws QuestionNotExistsException, MethodNotAllowedException;
     Question findQuestion(String question) throws QuestionNotExistsException, MethodNotAllowedException;
     Question getRandomQuestion();
-    List<Question> getAmountOfQuestions(int amount) throws QuestionNotExistsException, NotValidNumberException, NotEnoughQuestionException;
+    Collection<Question> getAmountOfQuestions(int amount) throws QuestionNotExistsException, NotValidNumberException, NotEnoughQuestionException;
     List<Question> getAllQuestions() throws MethodNotAllowedException;
 }

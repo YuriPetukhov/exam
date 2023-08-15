@@ -51,26 +51,23 @@ public class JavaQuestionServiceImpl implements QuestionService {
                 .orElse(null);
     }
     @Override
-    public List<Question> getAmountOfQuestions(int amount) throws NotValidNumberException, NotEnoughQuestionException {
-        if (amount == 0) {
+    public Collection<Question> getAmountOfQuestions(int amount) throws NotValidNumberException, NotEnoughQuestionException {
+        if (getAllQuestions().isEmpty()|| amount == 0) {
             return new ArrayList<>();
         }
         if (!NumberValidator.isPositiveNumber(amount)) {
             throw new NotValidNumberException();
         }
-        List<Question> allQuestionsCopy = new ArrayList<>(getAllQuestions());
-        if (amount > allQuestionsCopy.size()) {
+
+        if (amount > getAllQuestions().size()) {
             throw new NotEnoughQuestionException();
         }
-        List<Question> selectedQuestions = new ArrayList<>();
-        Random random = new Random();
+        Set<Question> selectedQuestions = new HashSet<>();
 
-        for (int i = 0; i < amount; i++) {
-            int randomIndex = random.nextInt(allQuestionsCopy.size());
-            selectedQuestions.add(allQuestionsCopy.get(randomIndex));
-            allQuestionsCopy.remove(randomIndex);
+        while (selectedQuestions.size() < amount) {
+            Question randomQuestion = getRandomQuestion();
+            selectedQuestions.add(randomQuestion);
         }
-
         return selectedQuestions;
     }
     @Override

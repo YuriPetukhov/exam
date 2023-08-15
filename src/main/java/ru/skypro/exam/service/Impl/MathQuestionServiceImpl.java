@@ -40,9 +40,8 @@ public class MathQuestionServiceImpl implements QuestionService {
         String answer = Integer.toString(Integer.parseInt(question.split(" ")[0]) + Integer.parseInt(question.split(" ")[2]));
         return new Question(question, answer);
     }
-
     @Override
-    public List<Question> getAmountOfQuestions(int amount) throws NotValidNumberException {
+    public Collection<Question> getAmountOfQuestions(int amount) throws NotValidNumberException {
         if (amount == 0) {
             return new ArrayList<>();
         }
@@ -51,11 +50,11 @@ public class MathQuestionServiceImpl implements QuestionService {
         }
 
         Set<Question> resultSet = new HashSet<>();
+
         while (resultSet.size() < amount) {
             Question randomQuestion = getRandomQuestion();
             resultSet.add(randomQuestion);
         }
-
         return new ArrayList<>(resultSet);
     }
 

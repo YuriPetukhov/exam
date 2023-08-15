@@ -34,6 +34,7 @@ class JavaQuestionServiceImplTest {
     void init() {
         allQuestions = TestData.generateRandomTestData(7);
     }
+
     @Test
     @DisplayName("Тест вызова методов репозитория при добавлении, удалении и получении всех вопросов")
     void shouldCallRepositoryMethodWhenAddRemoveAndGetAllQuestion() throws QuestionAlreadyExistsException, QuestionNotExistsException {
@@ -65,21 +66,16 @@ class JavaQuestionServiceImplTest {
     }
     @Test
     @DisplayName("Тест получения заданного количества вопросов")
-    void shouldReturnCollectionOfQuestions() {
+    void shouldReturnCollectionOfQuestions() throws NotValidNumberException, NotEnoughQuestionException {
         when(javaQuestionRepository.getAllQuestions()).thenReturn(new ArrayList<>(allQuestions));
-        Collection<Question> result = null;
-        try {
-            result = javaQuestionServiceImpl.getAmountOfQuestions(NUMBER_OF_QUESTIONS_TO_REQUEST);
-            assertEquals(NUMBER_OF_QUESTIONS_TO_REQUEST, result.size());
-        } catch (NotValidNumberException | NotEnoughQuestionException e) {
-            e.printStackTrace();
-        }
+        Collection<Question> result = javaQuestionServiceImpl.getAmountOfQuestions(NUMBER_OF_QUESTIONS_TO_REQUEST);
+        assertEquals(NUMBER_OF_QUESTIONS_TO_REQUEST, result.size());
     }
     @Test
-    @DisplayName("Тест получения вопросов, когда список пустой")
-    void shouldThrowExceptionByEmptyList() {
-        when(javaQuestionRepository.getAllQuestions()).thenReturn(Collections.emptyList());
-        assertThrows(NotEnoughQuestionException.class, () -> javaQuestionServiceImpl.getAmountOfQuestions(1));
+    @DisplayName("Тест получения вопросов при пустом списке")
+    void shouldReturnEmptyListWhenListIsEmpty() throws NotValidNumberException, NotEnoughQuestionException {
+        when(javaQuestionRepository.getAllQuestions()).thenReturn(new ArrayList<>());
+        assertTrue(javaQuestionServiceImpl.getAmountOfQuestions(1).isEmpty());
     }
     @Test
     @DisplayName("Тест получения вопросов при большем количестве, чем доступно")
@@ -90,6 +86,7 @@ class JavaQuestionServiceImplTest {
     @Test
     @DisplayName("Тест получения вопросов при невалидном числе")
     void shouldThrowExceptionNotValidNumber() {
+        when(javaQuestionRepository.getAllQuestions()).thenReturn(allQuestions);
         assertThrows(NotValidNumberException.class, () -> javaQuestionServiceImpl.getAmountOfQuestions(INVALID_AMOUNT));
     }
     @Test
